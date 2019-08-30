@@ -64,6 +64,9 @@ def reply():
         "vars": uservars,
     })
 
+def hello_world():
+    return "HELLO, Worrld!"
+
 @app.route("/")
 @app.route("/<path:path>")
 def index(path=None):

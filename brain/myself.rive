@@ -60,5 +60,8 @@
 + who is your master
 - <bot master>.
 
++ hello world
+- <call>hello_world</call>
+
 + *
 - Sorry, I don't know that one.
