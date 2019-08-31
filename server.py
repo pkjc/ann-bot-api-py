@@ -67,7 +67,7 @@ def reply():
     })
 
 def hello_world(rs, args):
-    pprint(vars(args))
+    pprint(args)
     return "HELLO, Worrld!"
 
 @app.route("/")
