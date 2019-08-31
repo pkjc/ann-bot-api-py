@@ -66,7 +66,7 @@ def reply():
     })
 
 def hello_world(arg1, arg2):
-    print("HELLO, Worrld!", arg1, arg2)
+    return "HELLO, Worrld!"
 
 @app.route("/")
 @app.route("/<path:path>")
