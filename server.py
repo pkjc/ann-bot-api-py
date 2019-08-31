@@ -4,6 +4,7 @@
 # repository.
 import os
 import sys
+from pprint import pprint
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from flask import Flask, request, Response, jsonify
 import json
@@ -66,6 +67,9 @@ def reply():
     })
 
 def hello_world(arg1, arg2):
+    pprint(vars(arg1))
+    print("********************")
+    pprint(vars(arg1))
     return "HELLO, Worrld!"
 
 @app.route("/")
