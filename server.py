@@ -15,7 +15,7 @@ bot = RiveScript()
 bot.load_directory(
     os.path.join(os.path.dirname(__file__), "", "brain")
 )
-bot.set_subroutine("hello_world", hello_world)
+
 bot.sort_replies()
 
 app = Flask(__name__)
@@ -51,11 +51,9 @@ def reply():
     if type(uservars) is dict:
         for key, value in uservars.items():
             bot.set_uservar(username, key, value)
-
+    bot.set_subroutine("hello_world", hello_world)
     # Get a reply from the bot.
     reply = bot.reply(username, message)
-
-    
 
     # Get all the user's vars back out of the bot to include in the response.
     uservars = bot.get_uservars(username)
