@@ -63,20 +63,59 @@ def reply():
     
     # Send the response.
     return jsonify({
-        "payload": {
-            "google": {
-                "expectUserResponse": True,
-                "richResponse": {
-                    "items": [
-                        {
-                            "simpleResponse": {
-                                "textToSpeech": reply
-                            }
-                        }
-                    ]
-                }
-            }
+      "fulfillmentText": "This is a text response",
+      "fulfillmentMessages": [
+        {
+          "card": {
+            "title": "card title",
+            "subtitle": "card text",
+            "imageUri": "https://assistant.google.com/static/images/molecule/Molecule-Formation-stop.png",
+            "buttons": [
+              {
+                "text": "button text",
+                "postback": "https://assistant.google.com/"
+              }
+            ]
+          }
         }
+      ],
+      "source": "example.com",
+      "payload": {
+        "google": {
+          "expectUserResponse": True,
+          "richResponse": {
+            "items": [
+              {
+                "simpleResponse": {
+                  "textToSpeech": "this is a simple response"
+                }
+              }
+            ]
+          }
+        },
+        "facebook": {
+          "text": "Hello, Facebook!"
+        },
+        "slack": {
+          "text": "This is a text response for Slack."
+        }
+      },
+      "outputContexts": [
+        {
+          "name": "projects/quotebot-18fe7/agent/sessions/69702c65-2e06-d2fa-0225-75bd0381bdc9/contexts/context name",
+          "lifespanCount": 5,
+          "parameters": {
+            "param": "param value"
+          }
+        }
+      ],
+      "followupEventInput": {
+        "name": "event name",
+        "languageCode": "en-US",
+        "parameters": {
+          "param": "param value"
+        }
+      }
     })
 
 def hello_world(rs, args):
