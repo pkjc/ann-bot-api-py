@@ -87,7 +87,7 @@ def extract_args(args):
             arg2 = args[2]
         else:
             arg1 = args[0]
-            arg2 = secondtwo.replace(" ", "_")
+            arg2 = secondtwo
     elif len(args) == 4:
         firsttwo = args[0] + " " + args[1]
         secondtwo = args[2] + " " +  args[3]
@@ -95,13 +95,13 @@ def extract_args(args):
         secondthree = args[1] + " " +  args[2] + " " +  args[3]
         if firsttwo in pat_feats:
             arg1 = firsttwo.replace(" ", "_")
-            arg2 = secondtwo.replace(" ", "_")
+            arg2 = secondtwo
         elif firstthree in pat_feats:
             arg1 = firstthree.replace(" ", "_")
             arg2 = args[3]
         else:
             arg1 = args[0]
-            arg2 = secondthree.replace(" ", "_")
+            arg2 = secondthree
     return arg1, arg2
 
 def query_db(args):
