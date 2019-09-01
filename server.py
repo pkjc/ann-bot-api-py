@@ -32,7 +32,9 @@ def reply():
     * vars
     """
     params = request.json
-    pprint(params)
+    for key, value in params.items():
+        print (key, value)
+
     if not params:
         return jsonify({
             "status": "error",
@@ -64,9 +66,7 @@ def reply():
 
     # Send the response.
     return jsonify({
-        "status": "ok",
         "reply": reply,
-        "vars": uservars,
     })
 
 def hello_world(rs, args):
