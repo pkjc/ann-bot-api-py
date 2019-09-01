@@ -34,7 +34,6 @@ def reply():
     params = request.json
     for key, value in params.items():
         print (key, value)
-
     if not params:
         return jsonify({
             "status": "error",
@@ -59,7 +58,8 @@ def reply():
 
     bot.set_subroutine("hello_world", hello_world)
     # Get a reply from the bot.
-    reply = bot.reply("username", params.queryResult.queryText)
+    print("params['queryResult'] => ", params['queryResult'])
+    reply = bot.reply("username", params['queryResult']['queryText'])
 
     # Get all the user's vars back out of the bot to include in the response.
     uservars = bot.get_uservars("username")
