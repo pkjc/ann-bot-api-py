@@ -57,7 +57,7 @@ def reply():
 
     bot.set_subroutine("hello_world", hello_world)
     # Get a reply from the bot.
-    reply = bot.reply("username", params.queryText)
+    reply = bot.reply("username", params.queryResult.queryText)
 
     # Get all the user's vars back out of the bot to include in the response.
     uservars = bot.get_uservars("username")
