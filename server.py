@@ -83,25 +83,25 @@ def extract_args(args):
         firsttwo = args[0] + " " +  args[1]
         secondtwo = args[1] + " " +  args[2]
         if firsttwo in pat_feats:
-            arg1 = firsttwo
+            arg1 = firsttwo.replace(" ", "_")
             arg2 = args[2]
         else:
             arg1 = args[0]
-            arg2 = secondtwo
+            arg2 = secondtwo.replace(" ", "_")
     elif len(args) == 4:
         firsttwo = args[0] + " " + args[1]
         secondtwo = args[2] + " " +  args[3]
         firstthree = args[0] + " " +  args[1] + " " +  args[2]
         secondthree = args[1] + " " +  args[2] + " " +  args[3]
         if firsttwo in pat_feats:
-            arg1 = firsttwo
-            arg2 = secondtwo
+            arg1 = firsttwo.replace(" ", "_")
+            arg2 = secondtwo.replace(" ", "_")
         elif firstthree in pat_feats:
-            arg1 = firstthree
+            arg1 = firstthree.replace(" ", "_")
             arg2 = args[3]
         else:
             arg1 = args[0]
-            arg2 = secondthree
+            arg2 = secondthree.replace(" ", "_")
     return arg1, arg2
 
 def query_db(args):
@@ -112,7 +112,7 @@ def query_db(args):
         passwd="Snehapkj1989",
         db="pankagei_ann_db")
     mycursor = myDB.cursor(prepared=True)
-    query = """SELECT COUNT(*) FROM `ann_data` WHERE %s LIKE '%s'""" % (args[0], args[1])  
+    query = """SELECT COUNT(*) FROM `ann_data` WHERE %s LIKE '%s'""" % (args[0], "%" + args[1] + "\%")  
     print(query)
     mycursor.execute(query)
     myresult = mycursor.fetchone()
