@@ -9,6 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from flask import Flask, request, Response, jsonify
 import json
 from rivescript import RiveScript
+import mysql.connector
 
 # Set up the RiveScript bot. This loads the replies from `/eg/brain` of the
 # git repository.
@@ -67,8 +68,59 @@ def reply():
     })
 
 def hello_world(rs, args):
-    pprint(args)
-    return "HELLO, Worrld!"
+    return query_db(extract_args(args))
+
+def extract_args(args):
+    pat_feats = ['gender','age','race','speech deficits','motor deficits','sensory deficits','diabetes', 
+    'hypertension','heart disease','copd','polycystic kidney disease','smoking history','cigarettes','cigar',
+    'smokeless','number of aneurysms','multiple aneurysms','family history','spinning feeling','dizziness', 
+    'diplopia','blurred vision','location','region','size','side']
+    pat_feats_vals = ['male','female','current smoker']
+    arg1 = ""
+    arg2 = ""
+    if len(args) == 2:
+        arg1 = args[0]
+        arg2 = args[1]
+    elif len(args) == 3:
+        firsttwo = args[0] + " " +  args[1]
+        secondtwo = args[1] + " " +  args[2]
+        if firsttwo in pat_feats:
+            arg1 = firsttwo
+            arg2 = args[2]
+        else:
+            arg1 = args[0]
+            arg2 = secondtwo
+    elif len(args) == 4:
+        firsttwo = args[0] + " " + args[1]
+        secondtwo = args[2] + " " +  args[3]
+        firstthree = args[0] + " " +  args[1] + " " +  args[2]
+        secondthree = args[1] + " " +  args[2] + " " +  args[3]
+        if firsttwo in pat_feats:
+            arg1 = firsttwo
+            arg2 = secondtwo
+        elif firstthree in pat_feats:
+            arg1 = firstthree
+            arg2 = args[3]
+        else:
+            arg1 = args[0]
+            arg2 = secondthree
+    return arg1, arg2
+
+def query_db(args):
+    myDB = mysql.connector.connect(
+        host="192.185.129.43",
+        port=3306,
+        user="pankagei_pkj",
+        passwd="Snehapkj1989",
+        db="pankagei_ann_db")
+    mycursor = myDB.cursor(prepared=True)
+    query = """SELECT COUNT(*) FROM `ann_data` WHERE %s LIKE '%s'""" % (args[0], args[1])  
+    print(query)
+    mycursor.execute(query)
+    myresult = mycursor.fetchone()
+    for x in myresult:
+        print(x)
+    return myresult[0]
 
 @app.route("/")
 @app.route("/<path:path>")

@@ -188,8 +188,3 @@
 ! array measure    = inch in centimeter cm millimeter mm meter m inches centimeters millimeters meters
 ! array yes        = yes yeah yep yup ya yea
 ! array no         = no nah nope nay
-! array patientfeatures = gender | age | race | speech deficits | motor deficits | sensory deficits | diabetes 
-^ hypertension | heart disease | copd | polycystic kidney disease | smoking history | cigarettes | cigar
-^ smokeless | number of aneurysms | multiple aneurysms | family history	| spinning feeling | dizziness 
-^ diplopia | blurred vision | location | region | size | side
-! array patientfeaturevals = male | female | current smoker

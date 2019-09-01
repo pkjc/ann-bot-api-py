@@ -4,14 +4,8 @@
 ^ hypertension|heart disease|copd|polycystic kidney disease|smoking history|cigarettes|cigar
 ^ smokeless|number of aneurysms|multiple aneurysms|family history|spinning feeling|dizziness 
 ^ diplopia|blurred vision|location|region|size|side
-! array patfeaturesvals = male|female|current smoker
-
-+ pat
-- hi
+! array patfeaturesvals = male|female|current smoker|Black|African American|yes|no|Current Smoker|Former Smoker|unruptured|ruptured
+^ Saccular|Paraclinoid|MCA|Basilar Tip|Paraclinoid|Superaclanoid Internal Carotid Artery|Anterior Communicating Artery
 
 + how many patients have (@patfeatures) as (@patfeaturesvals)
 - <call>hello_world <star1> <star2></call>
-
-// ^ hypertension | heart disease | copd | polycystic kidney disease | smoking history | cigarettes | cigar
-// ^ smokeless | number of aneurysms | multiple aneurysms | family history	| spinning feeling | dizziness 
-// ^ diplopia | blurred vision | location | region | size | side
