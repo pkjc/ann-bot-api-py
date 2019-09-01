@@ -25,15 +25,13 @@ app = Flask(__name__)
 @app.route("/reply", methods=["POST"])
 def reply():
     """Fetch a reply from RiveScript.
-
     Parameters (JSON):
     * username
     * message
     * vars
     """
     params = request.json
-    for key, value in params.items():
-        print (key, value)
+  
     if not params:
         return jsonify({
             "status": "error",
@@ -58,19 +56,32 @@ def reply():
 
     bot.set_subroutine("hello_world", hello_world)
     # Get a reply from the bot.
-    print("params['queryResult'] => ", params['queryResult'])
     reply = bot.reply("username", params['queryResult']['queryText'])
 
     # Get all the user's vars back out of the bot to include in the response.
     uservars = bot.get_uservars("username")
-
+    
     # Send the response.
     return jsonify({
-        "reply": reply,
+        "payload": {
+            "google": {
+                "expectUserResponse": True,
+                "richResponse": {
+                    "items": [
+                        {
+                            "simpleResponse": {
+                                "textToSpeech": reply
+                            }
+                        }
+                    ]
+                }
+            }
+        }
     })
 
 def hello_world(rs, args):
-    return query_db(extract_args(args))
+    resp = "There are about " + str(query_db(extract_args(args))) + " patients like that."
+    return resp
 
 def extract_args(args):
     pat_feats = ['gender','age','race','speech deficits','motor deficits','sensory deficits','diabetes', 
