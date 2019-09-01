@@ -31,7 +31,7 @@ def reply():
     * vars
     """
     params = request.json
-  
+    pprint(params)
     if not params:
         return jsonify({
             "status": "error",
@@ -92,12 +92,6 @@ def reply():
               }
             ]
           }
-        },
-        "facebook": {
-          "text": "Hello, Facebook!"
-        },
-        "slack": {
-          "text": "This is a text response for Slack."
         }
       },
       "outputContexts": [
