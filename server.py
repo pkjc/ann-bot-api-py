@@ -112,7 +112,7 @@ def query_db(args):
         passwd="Snehapkj1989",
         db="pankagei_ann_db")
     mycursor = myDB.cursor(prepared=True)
-    query = """SELECT COUNT(*) FROM `ann_data` WHERE %s LIKE '%s'""" % (args[0], "%" + args[1] + "\%")  
+    query = """SELECT COUNT(*) FROM `ann_data` WHERE %s LIKE '%s'""" % (args[0], "%" + args[1] + "%")  
     print(query)
     mycursor.execute(query)
     myresult = mycursor.fetchone()
