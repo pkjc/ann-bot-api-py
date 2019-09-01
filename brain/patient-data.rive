@@ -1,0 +1,17 @@
+! version = 2.0
+
+! array patfeatures = gender|age|race|speech deficits|motor deficits|sensory deficits|diabetes
+^ hypertension|heart disease|copd|polycystic kidney disease|smoking history|cigarettes|cigar
+^ smokeless|number of aneurysms|multiple aneurysms|family history|spinning feeling|dizziness 
+^ diplopia|blurred vision|location|region|size|side
+! array patfeaturesvals = male|female|current smoker
+
++ pat
+- hi
+
++ how many patients have (@patfeatures) as (@patfeaturesvals)
+- <call>hello_world <star1> <star2></call>
+
+// ^ hypertension | heart disease | copd | polycystic kidney disease | smoking history | cigarettes | cigar
+// ^ smokeless | number of aneurysms | multiple aneurysms | family history	| spinning feeling | dizziness 
+// ^ diplopia | blurred vision | location | region | size | side
