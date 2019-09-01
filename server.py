@@ -32,7 +32,7 @@ def reply():
     * vars
     """
     params = request.json
-    print(params.queryText)
+    pprint(params)
     if not params:
         return jsonify({
             "status": "error",
