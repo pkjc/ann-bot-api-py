@@ -73,9 +73,9 @@ def hello_world(rs, args):
 
 def extract_args(args):
     pat_feats = ['gender','age','race','speech deficits','motor deficits','sensory deficits','diabetes', 
-    'hypertension','heart disease','copd','polycystic kidney disease','smoking history','cigarettes','cigar',
+    'hypertension','heart disease','copd','polycystic kidney disease','smoking habit','cigarettes','cigar',
     'smokeless','number of aneurysms','multiple aneurysms','family history','spinning feeling','dizziness', 
-    'diplopia','blurred vision','location','region','size','side']
+    'diplopia','blurred vision','location','region','size','side','symptomatic']
     pat_feats_vals = ['male','female','current smoker']
     arg1 = ""
     arg2 = ""

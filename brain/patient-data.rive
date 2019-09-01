@@ -1,9 +1,9 @@
 ! version = 2.0
 
 ! array patfeatures = gender|age|race|speech deficits|motor deficits|sensory deficits|diabetes
-^ hypertension|heart disease|copd|polycystic kidney disease|smoking history|cigarettes|cigar
+^ hypertension|heart disease|copd|polycystic kidney disease|smoking habit|cigarettes|cigar
 ^ smokeless|number of aneurysms|multiple aneurysms|family history|spinning feeling|dizziness 
-^ diplopia|blurred vision|location|region|size|side
+^ diplopia|blurred vision|location|region|size|side|symptomatic
 ! array patfeaturesvals = male|female|current smoker|Black|African American|yes|no|Current Smoker|Former Smoker|unruptured|ruptured
 ^ Saccular|Paraclinoid|MCA|Basilar Tip|Paraclinoid|Superaclanoid Internal Carotid Artery|Anterior Communicating Artery
 

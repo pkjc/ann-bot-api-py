@@ -1,0 +1,18 @@
+how many patients have smoking habit as current smoker
+how many patients have smoking habit as former smoker
+how many patients have smoking habit as never smoked
+how many patients have race as african american
+how many patients have race as black
+how many patients have race as white
+how many patients have race as caucasian
+how many patients have race as asian
+how many patients have diabetes as yes
+how many patients have diabetes as no
+how many patients have hypertension as yes
+how many patients have hypertension as no
+how many patients have heart disease as yes
+how many patients have heart disease as no
+how many patients have COPD as yes
+how many patients have COPD as no
+how many patients have family history as yes
+how many patients have family history as no
