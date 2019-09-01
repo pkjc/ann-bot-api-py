@@ -32,34 +32,35 @@ def reply():
     * vars
     """
     params = request.json
-    pprint(params)
+    pprint("params ===> ", params.queryText)
     if not params:
         return jsonify({
             "status": "error",
             "error": "Request must be of the application/json type!",
         })
 
-    username = params.get("username")
-    message  = params.get("message")
-    uservars = params.get("vars", dict())
+    # username = params.get("username")
+    # message  = params.get("message")
+    # uservars = params.get("vars", dict())
 
     # Make sure the required params are present.
-    if username is None or message is None:
-        return jsonify({
-            "status": "error",
-            "error": "username and message are required keys",
-        })
+    # if username is None or message is None:
+    #     return jsonify({
+    #         "status": "error",
+    #         "error": "username and message are required keys",
+    #     })
 
     # Copy and user vars from the post into RiveScript.
-    if type(uservars) is dict:
-        for key, value in uservars.items():
-            bot.set_uservar(username, key, value)
+    # if type(uservars) is dict:
+    #     for key, value in uservars.items():
+    #         bot.set_uservar(username, key, value)
+
     bot.set_subroutine("hello_world", hello_world)
     # Get a reply from the bot.
-    reply = bot.reply(username, message)
+    reply = bot.reply("username", params.queryText)
 
     # Get all the user's vars back out of the bot to include in the response.
-    uservars = bot.get_uservars(username)
+    uservars = bot.get_uservars("username")
 
     # Send the response.
     return jsonify({
