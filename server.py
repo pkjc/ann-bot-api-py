@@ -20,6 +20,13 @@ bot.load_directory(
 
 bot.sort_replies()
 
+myDB = mysql.connector.connect(
+        host="192.185.129.43",
+        port=3306,
+        user="pankagei_pkj",
+        passwd="Snehapkj1989",
+        db="pankagei_ann_db")
+
 app = Flask(__name__)
 
 @app.route("/reply", methods=["POST"])
@@ -31,7 +38,7 @@ def reply():
     * vars
     """
     params = request.json
-    pprint(params)
+    # pprint(params)
     if not params:
         return jsonify({
             "status": "error",
@@ -54,18 +61,33 @@ def reply():
     #     for key, value in uservars.items():
     #         bot.set_uservar(username, key, value)
 
-    bot.set_subroutine("hello_world", hello_world)
+    bot.set_subroutine("fetch_patient_data", fetch_patient_data)
+    bot.set_subroutine("fetch_rupture_criticality", fetch_rupture_criticality)
     # Get a reply from the bot.
     reply = bot.reply("username", params['queryResult']['queryText'])
-
+    
     # Get all the user's vars back out of the bot to include in the response.
     uservars = bot.get_uservars("username")
-    
+    print("print(reply) ", reply)
     # Send the response.
-    return make_response(jsonify({'fulfillmentText': reply}))
+    return make_response(jsonify({'fulfillmentText':reply}))
 
-def hello_world(rs, args):
+def fetch_patient_data(rs, args):
     resp = "There are about " + str(query_db(extract_args(args))) + " patients like that."
+    return resp
+
+def fetch_rupture_criticality(rs, args):
+    query = ""
+    for s in args:
+        query += s + " "
+    # print(query)
+    args_dict = {}
+    for s in query.split('and'):
+        print(s)
+        args_dict[s.split('is')[0].strip()] = s.split('is')[1].strip()
+    pprint(args_dict)
+    resp = "The rupture probablity for this patient is " + query_db_rup(args_dict)
+    print("print(resp) ", resp)
     return resp
 
 def extract_args(args):
@@ -105,12 +127,6 @@ def extract_args(args):
     return arg1, arg2
 
 def query_db(args):
-    myDB = mysql.connector.connect(
-        host="192.185.129.43",
-        port=3306,
-        user="pankagei_pkj",
-        passwd="Snehapkj1989",
-        db="pankagei_ann_db")
     mycursor = myDB.cursor(prepared=True)
     query = """SELECT COUNT(*) FROM `ann_data` WHERE %s LIKE '%s'""" % (args[0], "%" + args[1] + "%")  
     print(query)
@@ -119,6 +135,24 @@ def query_db(args):
     for x in myresult:
         print(x)
     return myresult[0]
+
+def query_db_rup(args_dict):
+    mycursor = myDB.cursor(prepared=True)
+    query_sel_template = """SELECT `probability` FROM `ann_rup_prob` """
+    query_where_template = """ WHERE `location` LIKE %s 
+    AND `size` LIKE %s 
+    AND `rule_1` LIKE %s 
+    AND `rule_2` LIKE %s"""
+    arg_r1 = 'gender_' + args_dict['gender']
+    arg_r2 = 'motor_deficits_' + args_dict['motor deficits']
+    query = query_sel_template + query_where_template % ("'" + args_dict['aneurysm location'] + "'", 
+    "'" + args_dict['size category'] + "'", "'" + arg_r1 + "'", "'" + arg_r2 + "'")  
+    print(query)
+    mycursor.execute(query)
+    myresult = mycursor.fetchone()
+    for x in myresult:
+        print(x)
+    return myresult[0].decode()
 
 @app.route("/")
 @app.route("/<path:path>")

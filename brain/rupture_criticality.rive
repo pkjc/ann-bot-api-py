@@ -1,0 +1,5 @@
+! array params = aneurysm location|size category|gender|motor deficits
+! array param_vals = anterior communicating artery|tiny|female|yes
+
++ (give me|what is|what will be) [the] rupture criticality for a patient (whose|with|who has) *
+- <call>fetch_rupture_criticality <star3></call>

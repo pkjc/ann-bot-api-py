@@ -8,4 +8,4 @@
 ^ Saccular|Paraclinoid|MCA|Basilar Tip|Paraclinoid|Superaclanoid Internal Carotid Artery|Anterior Communicating Artery
 
 + how many patients have (@patfeatures) as (@patfeaturesvals)
-- <call>hello_world <star1> <star2></call>
+- <call>fetch_patient_data <star1> <star2></call>

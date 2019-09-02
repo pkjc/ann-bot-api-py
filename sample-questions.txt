@@ -16,3 +16,4 @@ how many patients have COPD as yes
 how many patients have COPD as no
 how many patients have family history as yes
 how many patients have family history as no
+give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size category is tiny and gender is female and motor deficits yes
