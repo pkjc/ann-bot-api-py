@@ -181,7 +181,7 @@ def query_db_rup1(args_dict):
     print(args)
 
     query = query_sel_template + query_where_template % ("'" + args_dict['aneurysm location'] + "'", 
-    "'" + args_dict['size category'] + "'", "'" + args[0] + "'", "'" + args[1] + "'")  
+    "'" + args_dict['size'] + "'", "'" + args[0] + "'", "'" + args[1] + "'")  
 
     print(query)
     
