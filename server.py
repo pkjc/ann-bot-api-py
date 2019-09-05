@@ -57,6 +57,7 @@ def reply():
 
     bot.set_subroutine("fetch_patient_data", fetch_patient_data)
     bot.set_subroutine("fetch_rupture_criticality", fetch_rupture_criticality)
+    print("User Query: ", params['queryResult']['queryText'])
     # Get a reply from the bot.
     reply = bot.reply("username", params['queryResult']['queryText'])
 
