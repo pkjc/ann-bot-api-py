@@ -31,12 +31,6 @@ app = Flask(__name__)
 
 @app.route("/reply", methods=["POST"])
 def reply():
-    """Fetch a reply from RiveScript.
-    Parameters (JSON):
-    * username
-    * message
-    * vars
-    """
     params = request.json
     # pprint(params)
     if not params:
