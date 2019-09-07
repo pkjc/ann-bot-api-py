@@ -16,18 +16,14 @@
 - <set gender=<star>>Alright, what is the age of the patient?
 
 + [*] # [*]
-% [*] (age of the patient|age should be a number)
-- <set age=<star>>What is the Aneurysm size of the patient?
-
-+ [*] _ [*]
-% [*] (age of the patient|age should be a number)
-- Age should be a number.
+% * age of the patient
+- <set age=<star>>OK, what is the Aneurysm size of the patient?
 
 + [*] # [*]
-% [*] aneurysm size of the patient
+% * aneurysm size of the patient
 - <set size=<star>><call>fetch_rupture_criticality </call>{topic=random}
 
 + *
-- hmmm, I didn't hear your answer, let's start over.  {topic=rup_prob}{@next}
+- hmmm, I didn't hear your answer, let's start over. {topic=rup_prob}{@next}
 
 < topic
