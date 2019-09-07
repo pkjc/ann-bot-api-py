@@ -59,11 +59,11 @@ def reply():
     bot.set_subroutine("fetch_rupture_criticality", fetch_rupture_criticality)
     print("User Query: ", params['queryResult']['queryText'])
     # Get a reply from the bot.
-    reply = bot.reply("username", params['queryResult']['queryText'])
+    reply = bot.reply("user_1", params['queryResult']['queryText'])
 
     # Get all the user's vars back out of the bot to include in the response.
-    uservars = bot.get_uservars("username")
-    print("print(reply) ", reply)
+    uservars = bot.get_uservars("user_1 ")
+    # print("print(reply) ", reply)
     # Send the response.
     return make_response(jsonify({'fulfillmentText':reply}))
 
@@ -74,22 +74,33 @@ def fetch_patient_data(rs, args):
 def calc_percentage(part, whole):
   return 100 * float(part)/float(whole)
 
+# def fetch_rupture_criticality(rs, args):
+#     query = ""
+#     for s in args:
+#         query += s + " "
+#     # print(query)
+#     args_dict = {}
+#     for s in query.split('and'):
+#         print(s)
+#         args_dict[s.split('is')[0].strip()] = s.split('is')[1].strip()
+#     pprint(args_dict)
+#     rup_prob = query_db_rup1(args_dict)
+#     if(rup_prob == 0):
+#         resp = "Could not calculate the rupture probability for the given input."
+#     else:
+#         resp = "The rupture probablity for this patient is about " + str(rup_prob) + "%"
+#     print("print(resp) ", resp)
+#     return resp
+
 def fetch_rupture_criticality(rs, args):
-    query = ""
-    for s in args:
-        query += s + " "
-    # print(query)
-    args_dict = {}
-    for s in query.split('and'):
-        print(s)
-        args_dict[s.split('is')[0].strip()] = s.split('is')[1].strip()
-    pprint(args_dict)
-    rup_prob = query_db_rup1(args_dict)
-    if(rup_prob == 0):
-        resp = "Could not calculate the rupture probability for the given input."
-    else:
-        resp = "The rupture probablity for this patient is about " + str(rup_prob) + "%"
-    print("print(resp) ", resp)
+    for key in rs.get_uservars('user_1'):
+        if('__lastmatch__' in key or 'topic' in key or '__history__' in key):
+            continue
+        else:
+            print(key, " : ", rs.get_uservar('user_1',key))
+            # pprint(rs.get_uservars(key))
+
+    resp="Thanks!"
     return resp
 
 def extract_args(args):
