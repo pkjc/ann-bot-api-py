@@ -9,3 +9,4 @@
 
 + how many patients have (@patfeatures) as (@patfeaturesvals)
 - <call>fetch_patient_data <star1> <star2></call>
+
