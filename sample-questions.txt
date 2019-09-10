@@ -1,11 +1,39 @@
-calculate rupture probability of a patient
+// WORKING QUERIES - START
 
-+ (give me|what is|what will be) [the] rupture criticality for a patient (whose|with|who has) *
-- <call>fetch_rupture_criticality <star3></call>
+Click==7.0
+Flask==1.1.1
+gunicorn==19.9.0
+itsdangerous==1.1.0
+Jinja2==2.10.1
+MarkupSafe==1.1.1
+mysql-connector==2.2.9
+rivescript==1.14.9
+six==1.11.0
+Werkzeug==0.15.5
+calculate rupture probability for a patient
 
+how many patients are caucasian
+how many patients are african american  
+how many patients are asian
+how many patients are 30 years old
 how many patients are over the age of 30
+how many patients are under 30
+how many patients are over 30
+how many patients are under the age of 30
+how many patients are over age 30
+how many patients are under age 30
 how many patients are between the ages 50 to 70
-how many patients are under 50
+how many patients are between ages 50 and 70
+
+tell me the number of patients who are non smokers
+tell me the number of patients who are current smokers
+how many patients are current smokers
+how many of the patients are current smokers
+how many patients are males
+how many of the patients are females
+how many patients have gender as unknown
+
+// WORKING QUERIES - END
 
 how many patients whose aneurysm ruptured are over the age of 50
 how many patients whose aneurysm ruptured are over 50
@@ -34,8 +62,17 @@ how many patients have COPD as no
 how many patients have family history as yes
 how many patients have family history as no
 
+is there a|any patient whose X is Y AND A is B  
+are there any patients whose X is Y AND A is B 
+
+handling negation 
+how many patients have family history as no
+
 give me the rupture criticality for a patient whose 
     aneurysm location is anterior communicating artery and 
     size category is tiny and 
     gender is female and 
     motor deficits yes
+
++ (give me|what is|what will be) [the] rupture criticality for a patient (whose|with|who has) *
+- <call>fetch_rupture_criticality <star3></call>

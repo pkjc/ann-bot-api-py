@@ -10,7 +10,11 @@ from flask import Flask, request, Response, jsonify, make_response
 import json
 from rivescript import RiveScript
 import mysql.connector
+from SubPreObj import SubPreObj
+from spacy.lemmatizer import Lemmatizer
+from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
 
+lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
 # Set up the RiveScript bot. This loads the replies from `/eg/brain` of the
 # git repository.
 bot = RiveScript()
@@ -68,7 +72,13 @@ def reply():
     return make_response(jsonify({'fulfillmentText':reply}))
 
 def fetch_patient_data(rs, args):
-    resp = "There are about " + str(query_db(extract_args(args))) + " patients like that."
+    patient_count = query_db(extract_args(args))
+    if patient_count == 0:
+        resp = "There are no patients like that."
+    elif patient_count == 1:
+        resp = "There is " + str(patient_count) + " patient like that."
+    else:
+        resp = "There are about " + str(patient_count) + " patients like that."
     return resp
 
 def calc_percentage(part, whole):
@@ -93,17 +103,18 @@ def calc_percentage(part, whole):
 #     return resp
 
 def fetch_rupture_criticality(rs, args):
+    print('===============\n', 'IDENTIFIED VARS')
     for key in rs.get_uservars('user_1'):
         if('__lastmatch__' in key or 'topic' in key or '__history__' in key):
             continue
         else:
             print(key, " : ", rs.get_uservar('user_1',key))
             # pprint(rs.get_uservars(key))
-
+    print('===============')
     resp="Thanks!"
     return resp
 
-def extract_args(args):
+def extract_args_common(args):
     pat_feats = ['gender','age','race','speech deficits','motor deficits','sensory deficits','diabetes', 
     'hypertension','heart disease','copd','polycystic kidney disease','smoking habit','cigarettes','cigar',
     'smokeless','number of aneurysms','multiple aneurysms','family history','spinning feeling','dizziness', 
@@ -139,14 +150,100 @@ def extract_args(args):
             arg2 = secondthree
     return arg1, arg2
 
-def query_db(args):
+def extract_args(args):
+    stop_words = ['what','how','of','a','an','the','me','tell','can','you','are','were', 
+    'had', 'ages', 'age', 'aged', 'gender', 'genders', 'race', 'disease']
+    possible_subjects = ['_age_','_gender_','_race_','_smoking_', '_disease_']
+    query_types = ['percentage', 'many', 'number']
+    possible_predicates = ['over', 'above', 'under', 'between']
+    print(args)
+    sub = ''
+    pre = ''
+    obj = ''
+    q_type = ''
+    for arg in list(args):
+        if(arg in stop_words):
+            args.remove(arg)
+    print(args)
+    for arg in list(args):
+        if arg in possible_subjects:
+            sub = arg
+        elif arg in query_types:
+            q_type = arg
+        elif arg in possible_predicates:
+            pre = arg
+        else:
+            obj = obj + ' ' + arg
+    
+    if(pre == ''): pre = 'eq'
+    spo = SubPreObj(sub,pre,obj.strip())
+    pprint(spo)
+    mapped_query = map_spo_to_sql(spo, q_type)
+    return mapped_query 
+
+# Take in a SPO object and map to SQL
+def map_spo_to_sql(spo, q_type):
+    # sub will be the column name, pre is the condition comes after where clause and objs are the vals
+    # need a mapper function to map SPO instance to SELECT FROM table WHERE {sub} {pre} {obj}
+    # SQL templates
+    # empty pre = LIKE
+    # over pre = > under pre = <
+    # if pre blank means equal
+    # split between queries by to or and
+    # if age query, clean up OBJ value to keep only number
+    mappings = {
+        "_smoking_" : "smoking_habit",
+        "smoking habit" : "smoking_habit",
+        "number" : "COUNT(*)",
+        "many" : "COUNT(*)",
+        "_age_" : "age",
+        "_gender_" : "gender",
+        "_race_" : "race",
+        "_disease_" : "disease",
+        "over" : ">",
+        "under" : "<",
+        "eq":"LIKE"
+    }
+    if "between" in spo.pre:
+        args = spo.obj.split("to")
+        if len(args) == 0:
+            args = spo.obj.split("and")
+        sel_query1 = """select %s from `ann_data` where %s between %s and %s""" % (
+                mappings[q_type], mappings[spo.sub], int(args[0]), int(args[1]))
+        return sel_query1
+        
+    try:
+        if "." in spo.obj :
+            val = float(spo.obj)
+            obj = val
+            if(mappings[spo.pre] == "LIKE"): mappings[spo.pre] = "="
+            sel_query1 = """select %s from `ann_data` where %s %s %s""" % (
+                mappings[q_type], mappings[spo.sub], mappings[spo.pre], obj)
+        else:
+            val = int(spo.obj)
+            obj = val
+            if(mappings[spo.pre] == "LIKE"): mappings[spo.pre] = "="
+            sel_query1 = """select %s from `ann_data` where %s %s %s""" % (
+                mappings[q_type], mappings[spo.sub], mappings[spo.pre], obj)
+    except ValueError:
+        obj = spo.obj
+        sel_query1 = """select %s from `ann_data` where %s %s '%s'""" % (
+            mappings[q_type], mappings[spo.sub], mappings[spo.pre], '%' + lemmatizer(obj, u'NOUN')[0] + '%')
+
+    # sel_query1 = "select " + mappings[q_type] + "from `ann_data`" 
+    # + " where " + mappings[spo.sub] + " " + mappings[spo.pre] + " %" + spo.obj + "%"
+    pprint(spo)
+    print(q_type)
+    print(sel_query1)
+    return sel_query1
+
+def query_db(query):
     mycursor = myDB.cursor(prepared=True)
-    query = """SELECT COUNT(*) FROM `ann_data` WHERE %s LIKE '%s'""" % (args[0], "%" + args[1] + "%")  
+    # query = """SELECT COUNT(*) FROM `ann_data` 
+    # WHERE %s LIKE '%s'""" % (args[0], "%" + args[1] + "%") 
     print(query)
     mycursor.execute(query)
     myresult = mycursor.fetchone()
-    for x in myresult:
-        print(x)
     return myresult[0]
 
 def query_db_rup(args_dict):
