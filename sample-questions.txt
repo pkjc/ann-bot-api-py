@@ -1,5 +1,18 @@
 // WORKING QUERIES - START
 
+give me the rupture criticality for a patient whose aneurysm location is 
+anterior communicating artery and size is 3.5 and gender is female and whose age is 
+35 and whose aneurysm is on left side and patient has motor deficits and patient was a smoker
+
+// RULE 1
+give me the rupture criticality for a patient whose aneurysm location is 
+anterior communicating artery and size is 3.5 and gender is female and patient has motor deficits
+
+// RULE 2
+give me the rupture criticality for a patient whose aneurysm location 
+is anterior communicating artery and size is 3.5 and race is african american and age is 40
+
+
 Click==7.0
 Flask==1.1.1
 gunicorn==19.9.0
@@ -47,6 +60,7 @@ how many patients have race as black
 how many patients have race as white
 how many patients have race as caucasian
 how many patients have race as asian
+how many patients have COPD
 
 how many patients have diabetes as yes
 how many patients have diabetes as no

@@ -2,28 +2,32 @@
 ! array param_vals = anterior communicating artery|tiny|female|yes
 ! array gender = male|female|unknown
 
-// Checklist before leaving
-+ [*] (give me|what is|what will be|calculate) [the] rupture (criticality|probability) (for|of) (a|this|the following) patient
-- {topic=rup_prob}{@next}
++ [*] rupture criticality [*] patient *
+- <call>fetch_rupture_criticality <star></call>
 
-> topic rup_prob
 
-+ next
-- Sure, what is the gender of the patient?
+// // Checklist before leaving
+// + [*] [can you] (give me|what is|what will be|calculate) [the] rupture (criticality|probability) (for|of) (a|this|the following) patient
+// - {topic=rup_prob}{@next}
 
-+ [*] (@gender) [*]
-% * gender of the patient
-- <set gender=<star>>Alright, what is the age of the patient?
+// > topic rup_prob
 
-+ [*] # [*]
-% * age of the patient
-- <set age=<star>>OK, what is the Aneurysm size of the patient?
+// + next
+// - Sure, what is the gender of the patient?
 
-+ [*] # [*]
-% * aneurysm size of the patient
-- <set size=<star>><call>fetch_rupture_criticality </call>{topic=random}
+// + [*] (@gender) [*]
+// % * gender of the patient
+// - <set gender=<star>>Alright, what is the age of the patient?
 
-+ *
-- hmmm, I didn't hear your answer, let's start over. {topic=rup_prob}{@next}
+// + [*] # [*]
+// % * age of the patient
+// - <set age=<star>>OK, what is the Aneurysm size of the patient?
 
-< topic
+// + [*] # [*]
+// % * aneurysm size of the patient
+// - <set size=<star>><call>fetch_rupture_criticality </call>{topic=random}
+
+// + *
+// - hmmm, I didn't hear your answer, let's start over. {topic=rup_prob}{@next}
+
+// < topic

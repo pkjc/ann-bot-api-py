@@ -102,16 +102,120 @@ def calc_percentage(part, whole):
 #     print("print(resp) ", resp)
 #     return resp
 
+# def fetch_rupture_criticality(rs, args):
+#     print('===============\n', 'IDENTIFIED VARS')
+#     for key in rs.get_uservars('user_1'):
+#         if('__lastmatch__' in key or 'topic' in key or '__history__' in key):
+#             continue
+#         else:
+#             print(key, " : ", rs.get_uservar('user_1',key))
+#             # pprint(rs.get_uservars(key))
+#     print('===============')
+#     resp="Thanks!"
+#     return resp
+
+def find_age_mapping(obj):
+    size_val = int(obj)
+    size_val = size_val / 10
+    if(size_val <= 5):
+        return "tiny"
+    elif(4 <= size_val <= 8):
+        return "small"
+    elif(8 <= size_val <= 14):
+        return "medium"
+    elif(14 <= size_val <= 22):
+        return "large"
+    elif(size_val >= 22):
+        return "giant"
+
+def find_mapping(obj):
+    if "motor" in obj:
+        return "motor_deficits_yes"
+    elif "smoke" in obj:
+        return "smoking_history_current_smoker"
+    elif "hypertension" in obj:
+        return 'hypertension_yes'
+    else: 
+        age_val = int(obj)
+        if( 38 <= age_val <= 58):
+            return "age_category_generation_x"
+        elif(age_val <= 37):
+            return "age_category_generation_y"
+        elif(age_val >= 74):
+            return "age_category_silent_generation"
+        elif(56 <= age_val <= 73):
+            return "age_category_baby_boomers"
+
+def map_spo_to_sql_rup(spo_list):
+    loc = ''
+    size = ''
+    rules = []
+    rem_list = ['aneurysm', 'patient', 'age']
+    for spo in spo_list:
+        sub = spo.sub
+        obj = spo.obj
+        if "location" in sub:
+            loc = obj
+        elif "size" in sub:
+            size = find_age_mapping(obj)
+        else:
+            for s in rem_list:
+                if s in sub:
+                    sub = sub.replace(s, '')
+            if(sub):
+                rule = sub + ' ' + obj
+                rules.append(rule.replace(' ', '_'))
+            else:
+                rules.append(find_mapping(obj))
+
+    sel_q = "SELECT probability FROM ann_rup_prob WHERE "
+    loc_size = """location LIKE '%s' AND size LIKE '%s' """ % (loc, size)
+    sql1 = sel_q + loc_size + """AND rule_1 LIKE '%s' AND rule_2 LIKE '%s' """ % (rules[0], rules[1])
+    sql2 = sel_q + loc_size + """AND rule_1 LIKE '%s'   AND rule_2 LIKE '%s' """ % (rules[1], rules[0])
+
+    print('sql1', sql1)
+    print('sql2', sql2)
+    return sql1, sql2
+
 def fetch_rupture_criticality(rs, args):
-    print('===============\n', 'IDENTIFIED VARS')
-    for key in rs.get_uservars('user_1'):
-        if('__lastmatch__' in key or 'topic' in key or '__history__' in key):
+    possible_subs = ['aneurysm', 'location', 'age', 'gender', 'smoking', 
+    'history', 'smoking', 'habit', 'race', 'hypertension', 'size', 'side', 'patient']
+    possible_preds = ['is', 'greater', 'over', 'under', 'less than', 'has', 'between', 'had', 'was']
+    stop_words = ['what','how','of','a','an','the','me','tell','can','you','are','were', 
+    'ages', 'age', 'aged', 'gender', 'genders', 'race', 'disease', 'and', 'whose', 'who', 'on']
+    sub = ''
+    pre = ''
+    obj = ''
+    spo_list = []
+    for arg in args:
+        if arg == "and":
+            spo_list.append(SubPreObj(sub.strip(),lemmatizer(pre.strip(), u"VERB")[0],obj.strip()))
+            sub = ''
+            pre = ''
+            obj = ''
+        if arg in possible_subs:
+            sub = sub + ' ' +arg      
+        elif arg in possible_preds:
+            pre = pre + ' ' +arg
+        elif arg in stop_words:
             continue
         else:
-            print(key, " : ", rs.get_uservar('user_1',key))
-            # pprint(rs.get_uservars(key))
-    print('===============')
-    resp="Thanks!"
+            obj = obj + ' ' + arg
+    
+    if sub or pre or obj:
+        spo_list.append(SubPreObj(sub.strip(),lemmatizer(pre.strip(), u"VERB")[0],obj.strip()))
+
+    pprint(spo_list)
+    sql1, sql2 = map_spo_to_sql_rup(spo_list)
+    rup_prob = query_db(sql1)
+    if(rup_prob == 0):
+        rup_prob = query_db(sql2)
+
+    if rup_prob == 0:
+        resp = "Sorry, I could not calculate the rupture probability."
+    else:
+        rup_prob_per = calc_percentage(rup_prob.decode(), 10)
+        resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%"
     return resp
 
 def extract_args_common(args):
@@ -244,7 +348,10 @@ def query_db(query):
     print(query)
     mycursor.execute(query)
     myresult = mycursor.fetchone()
-    return myresult[0]
+    if(myresult is None):
+        return 0
+    else: 
+        return myresult[0]
 
 def query_db_rup(args_dict):
     mycursor = myDB.cursor(prepared=True)
