@@ -189,6 +189,7 @@ def fetch_rupture_criticality(rs, args):
     pre = ''
     obj = ''
     spo_list = []
+    if 'size' not in args or 'location' not in args: return "Size or Location of Aneurysm is missing. Please retry with the corrected query" 
     for arg in args:
         if arg == "and":
             spo_list.append(SubPreObj(sub.strip(),lemmatizer(pre.strip(), u"VERB")[0],obj.strip()))

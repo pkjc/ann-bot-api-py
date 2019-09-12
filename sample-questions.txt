@@ -16,6 +16,13 @@ is anterior communicating artery and size is 3.5 and race is african american an
 give me the rupture criticality for a patient whose aneurysm location 
 is anterior communicating artery and size is 3.5 and race is african american and patient is a smoker
 
+// RULE 
+give me the rupture criticality for a patient whose aneurysm location 
+is paraclinoid and size is 3.5 and patient has hypertension and patient has multiple aneurysms 
+
+give me the rupture criticality for a patient whose aneurysm location 
+is superaclanoid internal carotid artery and size is 3.5 and age is 40 and aneurysm is on left side
+
 Click==7.0
 Flask==1.1.1
 gunicorn==19.9.0
