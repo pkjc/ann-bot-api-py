@@ -135,6 +135,8 @@ def find_mapping(obj):
         return "smoking_history_current_smoker"
     elif "hypertension" in obj:
         return 'hypertension_yes'
+    elif "multiple aneurysms" in obj:
+        return 'multiple_aneurysms_yes'
     else: 
         age_val = int(obj)
         if( 38 <= age_val <= 58):
@@ -164,7 +166,7 @@ def map_spo_to_sql_rup(spo_list):
                     sub = sub.replace(s, '')
             if(sub):
                 rule = sub + ' ' + obj
-                rules.append(rule.replace(' ', '_'))
+                rules.append(rule.strip().replace(' ', '_'))
             else:
                 rules.append(find_mapping(obj))
 
@@ -176,10 +178,10 @@ def map_spo_to_sql_rup(spo_list):
     print('sql1', sql1)
     print('sql2', sql2)
     return sql1, sql2
-
+# NEW
 def fetch_rupture_criticality(rs, args):
     possible_subs = ['aneurysm', 'location', 'age', 'gender', 'smoking', 
-    'history', 'smoking', 'habit', 'race', 'hypertension', 'size', 'side', 'patient']
+    'history', 'smoking', 'habit', 'race', 'size', 'side', 'patient']
     possible_preds = ['is', 'greater', 'over', 'under', 'less than', 'has', 'between', 'had', 'was']
     stop_words = ['what','how','of','a','an','the','me','tell','can','you','are','were', 
     'ages', 'age', 'aged', 'gender', 'genders', 'race', 'disease', 'and', 'whose', 'who', 'on']
