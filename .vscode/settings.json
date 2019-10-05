@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/Users/pkj/workspace/ann-bot-api-py/ann-bot-api-py/bin/python3"
+    "python.pythonPath": "/Users/pkj/workspace/ann-bot-api-py/ann-bot-api-py/bin/python3",
+    "git.ignoreLimitWarning": true
 }

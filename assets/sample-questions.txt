@@ -1,0 +1,124 @@
+// WORKING QUERIES - START
+
+give me the rupture criticality for a patient whose aneurysm location is 
+anterior communicating artery and size is 3.5 and gender is female and whose age is 
+35 and whose aneurysm is on left side and patient has motor deficits and patient was a smoker
+
+// RULE 1
+give me the rupture criticality for a patient whose aneurysm location is 
+anterior communicating artery and size is 3.5 and gender is female and patient has motor deficits
+
+// RULE 2
+give me the rupture criticality for a patient whose aneurysm location 
+is anterior communicating artery and size is 3.5 and race is african american and age is 40
+
+// RULE 3
+give me the rupture criticality for a patient whose aneurysm location 
+is anterior communicating artery and size is 3.5 and race is african american and patient is a smoker
+
+// RULE 
+give me the rupture criticality for a patient whose aneurysm location 
+is paraclinoid and size is 3.5 and patient has hypertension and patient has multiple aneurysms 
+
+give me the rupture criticality for a patient whose aneurysm location 
+is superaclanoid internal carotid artery and size is 3.5 and age is 40 and aneurysm is on left side
+
+Click==7.0
+Flask==1.1.1
+gunicorn==19.9.0
+itsdangerous==1.1.0
+Jinja2==2.10.1
+MarkupSafe==1.1.1
+mysql-connector==2.2.9
+rivescript==1.14.9
+six==1.11.0
+Werkzeug==0.15.5
+calculate rupture probability for a patient
+
+patient 
+race
+age
+disease
+
+
+how many patients are caucasian
+
+race  < - > caucasian
+
+EMBEDDIGNS
+is this word relevant to my db or domain using word embdings
+which column name has maximum similarity with given word form a query based on that
+
+ENTITY LINKING
+1. finding entities in query using nlp libary
+2. perform enrichment of identified concepts bring synonyms and related words eg. an loc besler 
+
+
+use bioportal api
+
+
+
+how many patients are african american  
+how many patients are asian
+how many patients are 30 years old
+how many patients are over the age of 30
+how many patients are under 30
+how many patients are over 30
+how many patients are under the age of 30
+how many patients are over age 30
+how many patients are under age 30
+how many patients are between the ages 50 to 70
+how many patients are between ages 50 and 70
+
+tell me the number of patients who are non smokers
+tell me the number of patients who are current smokers
+how many patients are current smokers
+how many of the patients are current smokers
+how many patients are males
+how many of the patients are females
+how many patients have gender as unknown
+
+// WORKING QUERIES - END
+
+how many patients whose aneurysm ruptured are over the age of 50
+how many patients whose aneurysm ruptured are over 50
+
+how many patients have smoking habit as current smoker
+how many patients have smoking habit as former smoker
+how many patients have smoking habit as never smoked
+
+how many patients have race as african american
+how many patients have race as black
+how many patients have race as white
+how many patients have race as caucasian
+how many patients have race as asian
+how many patients have COPD
+
+how many patients have diabetes as yes
+how many patients have diabetes as no
+how many patients have diabetes
+how many patients don't have diabetes
+
+how many patients have hypertension as yes
+how many patients have hypertension as no
+how many patients have heart disease as yes
+how many patients have heart disease as no
+how many patients have COPD as yes
+how many patients have COPD as no
+how many patients have family history as yes
+how many patients have family history as no
+
+is there a|any patient whose X is Y AND A is B  
+are there any patients whose X is Y AND A is B 
+
+handling negation 
+how many patients have family history as no
+
+give me the rupture criticality for a patient whose 
+    aneurysm location is anterior communicating artery and 
+    size category is tiny and 
+    gender is female and 
+    motor deficits yes
+
++ (give me|what is|what will be) [the] rupture criticality for a patient (whose|with|who has) *
+- <call>fetch_rupture_criticality <star3></call>

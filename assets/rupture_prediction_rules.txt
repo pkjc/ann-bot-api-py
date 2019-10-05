@@ -1,0 +1,260 @@
+location anterior communicating artery size tiny gender female motor deficits yes	10.0 
+location anterior communicating artery size tiny race black/african american age category generation x	8.0 
+location anterior communicating artery size tiny race black/african american smoking history current smoker	8.57 
+location anterior communicating artery size small age category generation x gender male	8.81 
+location anterior communicating artery size medium gender female age category generation x	8.05 
+location anterior communicating artery size medium race black/african american gender male	9.46 
+location anterior communicating artery size medium race black/african american hypertension yes	7.99 
+location paraclinoid size tiny gender female smoking history current smoker	8.54
+location paraclinoid size tiny hypertension yes multiple aneurysms yes	7.94 
+location paraclinoid size tiny age category generation x gender male	9.55 
+location paraclinoid size tiny race white/caucasian gender male	8.5 
+location paraclinoid size tiny age category baby boomers side right	8.27 
+location paraclinoid size tiny hypertension yes age category generation x	8.94 
+location paraclinoid size tiny age category generation x smoking history current smoker	8.61 
+location paraclinoid size tiny hypertension yes smoking history current smoker	9.27 
+location paraclinoid size tiny hypertension yes side right	8.34 
+location paraclinoid size tiny race white/caucasian hypertension yes	8.07 
+location paraclinoid size tiny smoking history current smoker multiple aneurysms yes	8.95 
+location paraclinoid size tiny side left smoking history current smoker	8.09 
+location paraclinoid size tiny smoking history current smoker side right	8.78 
+location paraclinoid size tiny race black/african american smoking history current smoker	8.21 
+location paraclinoid size tiny race white/caucasian smoking history current smoker	8.91 
+location paraclinoid size small gender female side left	5.32 
+location paraclinoid size small age category generation y gender male	8.34 
+location paraclinoid size small gender male side right	8.12 
+location paraclinoid size small age category generation y smoking history current smoker	8.34 
+location superaclanoid internal carotid artery size tiny gender female age category generation x	5.44 
+location superaclanoid internal carotid artery size tiny gender female smoking history current smoker	5.5 
+location superaclanoid internal carotid artery size tiny gender female multiple aneurysms yes	5.34 
+location superaclanoid internal carotid artery size tiny gender female side left	5.41 
+location superaclanoid internal carotid artery size tiny gender female race black/african american	5.41 
+location superaclanoid internal carotid artery size tiny gender female dizziness yes	5.61 
+location superaclanoid internal carotid artery size tiny age category generation x side left	5.47 
+location superaclanoid internal carotid artery size tiny race black/african american age category generation x	5.47 
+location superaclanoid internal carotid artery size tiny race black/african american hypertension yes	5.4 
+location superaclanoid internal carotid artery size tiny race white/caucasian age category baby boomers	5.43 
+location superaclanoid internal carotid artery size tiny age category generation x smoking history current smoker	5.49 
+location superaclanoid internal carotid artery size tiny race black/african american smoking history current smoker	5.55 
+location superaclanoid internal carotid artery size tiny race black/african american side left	5.39 
+location superaclanoid internal carotid artery size tiny race black/african american side right	5.44 
+location superaclanoid internal carotid artery size tiny hypertension yes side left	5.35 
+location superaclanoid internal carotid artery size tiny hypertension yes dizziness yes	5.65 
+location superaclanoid internal carotid artery size tiny side left smoking history current smoker	5.52 
+location superaclanoid internal carotid artery size tiny race white/caucasian side left	5.44 
+location superaclanoid internal carotid artery size tiny race black/african american dizziness yes	5.64 
+location superaclanoid internal carotid artery size small gender female age category baby boomers	5.54 
+location superaclanoid internal carotid artery size small gender female age category generation x	5.59 
+location superaclanoid internal carotid artery size small gender female side right	5.61 
+location superaclanoid internal carotid artery size small gender female race black/african american	5.57 
+location superaclanoid internal carotid artery size small hypertension yes side right	5.58 
+location superaclanoid internal carotid artery size small age category generation x smoking history current smoker	5.61 
+location superaclanoid internal carotid artery size small race black/african american hypertension yes	5.54 
+location superaclanoid internal carotid artery size small age category generation x side right	5.59 
+location superaclanoid internal carotid artery size small race black/african american age category generation x	5.65 
+location superaclanoid internal carotid artery size small race black/african american side left	5.61 
+location superaclanoid internal carotid artery size small race black/african american side right	5.58 
+location superaclanoid internal carotid artery size small race white/caucasian side right	5.67 
+location superaclanoid internal carotid artery size small smoking history current smoker multiple aneurysms yes	5.53 
+location superaclanoid internal carotid artery size medium gender female age category generation x	5.55 
+location superaclanoid internal carotid artery size medium gender female age category generation x	5.55 
+location superaclanoid internal carotid artery size medium gender female smoking history current smoker	5.42 
+location superaclanoid internal carotid artery size medium gender female side right	5.42 
+location superaclanoid internal carotid artery size medium gender female race black/african american	5.34 
+location superaclanoid internal carotid artery size medium race white/caucasian gender female	5.46 
+location superaclanoid internal carotid artery size medium hypertension yes age category generation x	5.51 
+location superaclanoid internal carotid artery size medium side left smoking history current smoker	5.39 
+location superaclanoid internal carotid artery size medium side left age category generation x	5.54 
+location superaclanoid internal carotid artery size medium race black/african american smoking history current smoker	5.38 
+location superaclanoid internal carotid artery size medium age category generation x side right	5.53 
+location superaclanoid internal carotid artery size medium race black/african american age category generation x	5.54 
+location superaclanoid internal carotid artery size medium race black/african american side left	5.39 
+location paraclinoid size small gender female age category generation x	5.86 
+location paraclinoid size small age category generation x side right	5.56 
+location paraclinoid size small race white/caucasian age category generation x	5.51 
+location paraclinoid size medium gender female hypertension yes	5.71 
+location paraclinoid size medium gender female side left	5.58 
+location paraclinoid size medium race black/african american gender female	5.8 
+location paraclinoid size medium hypertension yes age category baby boomers	5.52 
+location paraclinoid size medium race black/african american age category baby boomers	5.4 
+location paraclinoid size medium race white/caucasian smoking history current smoker	5.83 
+location paraclinoid size medium race white/caucasian multiple aneurysms yes	5.43 
+location mca size tiny gender female side left	5.5 
+location mca size tiny race black/african american gender female	5.37 
+location mca size tiny age category generation x dizziness yes	5.88 
+location mca size tiny race white/caucasian age category generation x	5.43 
+location mca size tiny hypertension yes dizziness yes	5.38 
+location mca size tiny smoking history current smoker motor deficits yes	5.8 
+location mca size tiny race black/african american side left	5.56 
+location mca size tiny side right dizziness yes	5.43 
+location mca size tiny race black/african american motor deficits yes	5.62 
+location mca size small gender female age category baby boomers	5.65 
+location mca size small hypertension yes gender female	5.64 
+location mca size small gender female smoking history current smoker	5.88 
+location mca size small gender female side left	5.74 
+location mca size small gender female side right	5.62 
+location mca size small race black/african american gender female	5.79 
+location mca size small hypertension yes age category baby boomers	5.7 
+location mca size small age category generation x gender male	5.79 
+location mca size small race white/caucasian side right	5.69 
+location mca size small age category generation x side right	5.73 
+location mca size small race black/african american age category generation x	5.81 
+location mca size small race white/caucasian age category generation x	5.79 
+location mca size small hypertension yes side left	5.84 
+location mca size small race black/african american hypertension yes	5.65 
+location mca size small side left smoking history current smoker	5.9 
+location mca size small race black/african american side left	5.96 
+location mca size medium gender female age category baby boomers	5.63 
+location mca size medium hypertension yes gender female	5.79 
+location mca size medium gender male side right	5.71 
+location mca size medium race white/caucasian gender male	5.48 
+location mca size medium race white/caucasian age category generation x	5.83 
+location mca size medium hypertension yes side right	5.7 
+location mca size medium race white/caucasian smoking history current smoker	5.58 
+location mca size medium age category baby boomers smoking history current smoker	5.91 
+location mca size medium age category generation x smoking history current smoker	5.87 
+location mca size medium age category generation x multiple aneurysms yes	5.64 
+location mca size medium age category generation x side right	5.78 
+location mca size medium hypertension yes smoking history current smoker	5.9 
+location mca size medium smoking history current smoker multiple aneurysms yes	5.79 
+location mca size medium side right multiple aneurysms yes	5.65 
+location mca size medium race white/caucasian multiple aneurysms yes	5.75 
+location mca size medium race white/caucasian side left	5.81 
+location superaclanoid internal carotid artery size tiny hypertension yes age category baby boomers	5.26 
+location superaclanoid internal carotid artery size tiny side left multiple aneurysms yes	5.3 
+location superaclanoid internal carotid artery size medium gender female age category baby boomers	5.29 
+location superaclanoid internal carotid artery size medium gender female motor deficits yes	5.28 
+location superaclanoid internal carotid artery size medium age category baby boomers side right	5.18 
+location superaclanoid internal carotid artery size medium race black/african american age category baby boomers	5.19 
+location superaclanoid internal carotid artery size medium hypertension yes smoking history current smoker	5.17 
+location superaclanoid internal carotid artery size medium hypertension yes side right	5.18 
+location superaclanoid internal carotid artery size medium hypertension yes race black/african american	5.3 
+location superaclanoid internal carotid artery size medium smoking history current smoker motor deficits yes	5.28 
+location superaclanoid internal carotid artery size medium side left motor deficits yes	5.31 
+location superaclanoid internal carotid artery size medium race white/caucasian side right	5.2 
+location paraclinoid size small race white/caucasian gender female	4.94 
+location paraclinoid size small race white/caucasian side left	5.26 
+location paraclinoid size medium gender female age category baby boomers	4.59 
+location paraclinoid size medium race white/caucasian gender female	4.57 
+location paraclinoid size medium age category baby boomers side left	5.23 
+location paraclinoid size medium race white/caucasian age category baby boomers	4.22 
+location paraclinoid size medium race white/caucasian hypertension yes	5.23 
+location paraclinoid size medium age category generation x smoking history current smoker	5.27 
+location mca size tiny gender female age category baby boomers	4.89 
+location mca size tiny hypertension yes gender female	4.88 
+location mca size tiny gender female multiple aneurysms yes	4.83 
+location mca size tiny gender female side right	5.03 
+location mca size tiny age category baby boomers side right	4.89 
+location mca size tiny hypertension yes side right	4.85 
+location mca size tiny age category baby boomers multiple aneurysms yes	4.79 
+location mca size tiny side right multiple aneurysms yes	4.97 
+location mca size tiny race black/african american side right	5.04 
+location mca size tiny race black/african american age category baby boomers	5.05 
+location mca size tiny hypertension yes age category generation x	4.91 
+location mca size tiny hypertension yes smoking history current smoker	4.77 
+location mca size tiny hypertension yes race black/african american	4.93 
+location mca size tiny race black/african american multiple aneurysms yes	5.07 
+location anterior communicating artery size tiny hypertension yes gender female	6.26 
+location anterior communicating artery size tiny hypertension yes smoking history current smoker	6.7 
+location anterior communicating artery size tiny hypertension yes age category generation x	6.67 
+location anterior communicating artery size small race white/caucasian gender male	6.66 
+location anterior communicating artery size small race white/caucasian smoking history current smoker	6.08 
+location anterior communicating artery size small age category generation x smoking history current smoker	6.62 
+location anterior communicating artery size medium smoking history current smoker gender male	6.19 
+location paraclinoid size tiny race white/caucasian gender female	6.2 
+location paraclinoid size tiny race white/caucasian side right	6.76 
+location paraclinoid size small gender female smoking history former smoker	6.28 
+location paraclinoid size small race black/african american gender male	6.33 
+location paraclinoid size small side left age category generation x	6.39 
+location paraclinoid size small race black/african american age category generation x	6.3 
+location paraclinoid size small smoking history former smoker side right	6.42 
+location paraclinoid size small race white/caucasian smoking history former smoker	6.42 
+location paraclinoid size small race black/african american side right	6.5 
+location paraclinoid size medium hypertension yes multiple aneurysms yes	6.04 
+location paraclinoid size medium side left multiple aneurysms yes	6.05 
+location paraclinoid size medium hypertension yes age category generation x	6.17 
+location paraclinoid size medium age category generation x multiple aneurysms yes	6.36 
+location paraclinoid size medium age category generation x side left	6.53 
+location paraclinoid size medium race black/african american age category generation x	6.15 
+location paraclinoid size medium hypertension yes side left	6.24 
+location paraclinoid size medium race black/african american hypertension yes	6.35 
+location paraclinoid size medium smoking history current smoker multiple aneurysms yes	6.64 
+location paraclinoid size medium race black/african american multiple aneurysms yes	6.29 
+location paraclinoid size medium race black/african american side left	6.49 
+location mca size tiny gender female motor deficits yes	6.25 
+location mca size tiny age category generation y hypertension yes	6.68 
+location mca size tiny race black/african american dizziness yes	6.01 
+location mca size small gender female motor deficits yes	6.6 
+location mca size small side left age category generation x	6.08 
+location mca size medium gender female age category generation x	5.98 
+location mca size medium gender female multiple aneurysms yes	6.01 
+location mca size medium gender female smoking history current smoker	5.99 
+location mca size medium race black/african american gender female	6.06 
+location mca size medium gender female side left	6.04 
+location mca size medium gender female speech deficits yes	6.61 
+location mca size medium gender female motor deficits yes	6.77 
+location mca size medium race black/african american hypertension yes	6.06 
+location mca size medium smoking history current smoker side right	6.01 
+location mca size medium race black/african american age category baby boomers	6.2 
+location mca size medium side left age category generation x	6.04 
+location mca size medium hypertension yes motor deficits yes	6.59 
+location mca size medium race black/african american smoking history current smoker	6.58 
+location mca size medium side left multiple aneurysms yes	6.31 
+location mca size medium side right motor deficits yes	6.16 
+location mca size medium race black/african american side right	6.03 
+location mca size medium race black/african american motor deficits yes	6.47 
+location mca size medium race white/caucasian motor deficits yes	6.5 
+location anterior communicating artery size tiny gender female age category generation x	7.35 
+location anterior communicating artery size tiny gender female smoking history current smoker	7.22 
+location anterior communicating artery size tiny race black/african american gender female	7.58 
+location anterior communicating artery size tiny gender female multiple aneurysms yes	7.61 
+location anterior communicating artery size tiny age category generation x smoking history current smoker	7.36 
+location anterior communicating artery size tiny hypertension yes race black/african american	7.22 
+location anterior communicating artery size small hypertension yes gender male	7.18 
+location anterior communicating artery size small smoking history current smoker gender male	7.25 
+location anterior communicating artery size small race black/african american age category generation x	7.36 
+location anterior communicating artery size small race white/caucasian age category generation x	7.28 
+location anterior communicating artery size medium hypertension yes gender female	7.44 
+location anterior communicating artery size medium race white/caucasian gender female	7.49 
+location anterior communicating artery size medium hypertension yes age category generation x	7.1 
+location paraclinoid size tiny gender female age category baby boomers	7.13 
+location paraclinoid size tiny gender female hypertension yes	7.58 
+location paraclinoid size tiny gender female side right	6.84 
+location paraclinoid size tiny gender female multiple aneurysms yes	6.91 
+location paraclinoid size tiny side right multiple aneurysms yes	7.85 
+location paraclinoid size tiny race black/african american multiple aneurysms yes	7.7 
+location paraclinoid size tiny race white/caucasian age category baby boomers	7.46 
+location paraclinoid size tiny age category generation x multiple aneurysms yes	7.51 
+location paraclinoid size tiny side left age category generation x	7.21 
+location paraclinoid size tiny race black/african american age category generation x	7.29 
+location paraclinoid size tiny hypertension yes side left	7.38 
+location paraclinoid size small smoking history current smoker gender male	7.9 
+location paraclinoid size small age category generation x smoking history current smoker	7.5 
+location paraclinoid size small smoking history former smoker age category generation x	7.35 
+location paraclinoid size small age category generation y side right	7.3 
+location paraclinoid size small age category generation y race black/african american	7.63 
+location paraclinoid size small smoking history current smoker side right	7.51 
+location paraclinoid size small race black/african american smoking history current smoker	7.56 
+location paraclinoid size medium gender female smoking history current smoker	6.87 
+location paraclinoid size medium gender female motor deficits yes	7.13 
+location paraclinoid size medium hypertension yes smoking history current smoker	6.83 
+location paraclinoid size medium age category baby boomers smoking history current smoker	7.08 
+location paraclinoid size medium age category baby boomers dizziness yes	7.24 
+location paraclinoid size medium age category generation x motor deficits yes	7.13 
+location paraclinoid size medium hypertension yes dizziness yes	7.24 
+location paraclinoid size medium hypertension yes motor deficits yes	7.13 
+location paraclinoid size medium side left smoking history current smoker	7.02 
+location paraclinoid size medium smoking history current smoker dizziness yes	7.24 
+location paraclinoid size medium race black/african american smoking history current smoker	7.13 
+location paraclinoid size medium dizziness yes multiple aneurysms yes	7.24 
+location paraclinoid size medium multiple aneurysms yes motor deficits yes	7.13 
+location paraclinoid size medium side left dizziness yes	7.24 
+location paraclinoid size medium side left motor deficits yes	7.13 
+location paraclinoid size medium race white/caucasian dizziness yes	7.24 
+location paraclinoid size medium race black/african american motor deficits yes	7.13 
+location mca size tiny age category generation y side left	7.66 
+location mca size tiny age category generation y race black/african american	7.19 
+location mca size medium age category generation x motor deficits yes	7.42 
+location mca size medium smoking history current smoker motor deficits yes	7.16 
+location mca size medium multiple aneurysms yes motor deficits yes	6.88 
+location mca size medium side left motor deficits yes	7.14 
