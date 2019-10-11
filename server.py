@@ -10,7 +10,7 @@ from flask import Flask, request, Response, jsonify, make_response
 import json
 from rivescript import RiveScript
 import mysql.connector
-from SubPreObj import SubPreObj
+from models.SubPreObj import SubPreObj
 from spacy.lemmatizer import Lemmatizer
 from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
 
@@ -19,7 +19,7 @@ lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
 # git repository.
 bot = RiveScript()
 bot.load_directory(
-    os.path.join(os.path.dirname(__file__), "", "brain")
+    os.path.join(os.path.dirname(__file__), "", "rivescript_brain")
 )
 
 bot.sort_replies()

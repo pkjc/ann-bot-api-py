@@ -2,7 +2,6 @@ from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.corpus import stopwords 
 import wikipedia
-from html2txt import html2txt
 
 class Doc2VecHelper:
     stop_words = set(stopwords.words('english'))
