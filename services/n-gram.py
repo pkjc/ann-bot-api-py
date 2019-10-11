@@ -25,5 +25,5 @@ for word,pos in nltk.pos_tag(tokenized_sent):
             or pos == 'JJ' or pos == 'VB' or pos == 'VBP' or pos == 'VBG'):
         nouns.append(word)
 
-print(list(bigrams(nouns)))
-print(list(trigrams(nouns)))
+print(list(bigrams(tokenized_sent)))
+print(list(trigrams(tokenized_sent)))

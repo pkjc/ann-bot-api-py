@@ -220,7 +220,7 @@ nlp = en_core_web_md.load()
 # identify noun phrases and add _ between the words to mark them as noun phrases
 
 s1 = u"""
-How many patients are 30 years_old?
+How many patients are 30 years old?
 """
 s2 = u"gender is female"
 s3 = u"patient has motor_deficits"
