@@ -1,4 +1,4 @@
-ml_models/
+ml_models/enwiki_dbow.tgz
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
