@@ -303,10 +303,11 @@ def findSVOs(tokens):
 
 str1 = "Give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery."
 str2 = "Aneurysm size is 3.5 and gender is female and patient has motor deficits."
+str3 = "How many patients are african_american"
 
-tokens1 = nlp(str1)
+tokens1 = nlp(str3)
 svos1 = findSVOs(tokens1)
 print(svos1)
-tokens2 = nlp(str2)
-svos2 = findSVOs(tokens2)
-print(svos2)
+# tokens2 = nlp(str2)
+# svos2 = findSVOs(tokens2)
+# print(svos2)

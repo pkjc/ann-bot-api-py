@@ -53,10 +53,7 @@ ENTITY LINKING
 1. finding entities in query using nlp libary
 2. perform enrichment of identified concepts bring synonyms and related words eg. an loc besler 
 
-
 use bioportal api
-
-
 
 how many patients are african american  
 how many patients are asian
@@ -122,3 +119,6 @@ give me the rupture criticality for a patient whose
 
 + (give me|what is|what will be) [the] rupture criticality for a patient (whose|with|who has) *
 - <call>fetch_rupture_criticality <star3></call>
+
+ACTIVATE ENV
+source /Users/pkj/workspace/ann-bot-api-py/ann-bot-api-py/bin/activate

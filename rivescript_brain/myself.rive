@@ -64,7 +64,7 @@
 - <call>hello_world <star></call>
 
 + [*] ann helper [*]
-- Hello! My name is Ann. I'm a virtual assistant for doctors and I help them decide on the treatment of an Aneurysm patient.
+- Hello! My name is Ann. I'm a virtual assistant for Neurosugeons. How can I help you?
 
 + *
-- Sorry, I don't know that one.
+- Sorry, I don't know that one. Can you please try asking in another way?

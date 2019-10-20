@@ -74,11 +74,11 @@ def reply():
 def fetch_patient_data(rs, args):
     patient_count = query_db(extract_args(args))
     if patient_count == 0:
-        resp = "There are no patients like that."
+        resp = "There are no patients like that. Is there anything else I can help you with?"
     elif patient_count == 1:
-        resp = "There is " + str(patient_count) + " patient like that."
+        resp = "There is " + str(patient_count) + " patient like that. Is there anything else I can help you with?"
     else:
-        resp = "There are about " + str(patient_count) + " patients like that."
+        resp = "There are about " + str(patient_count) + " patients like that. Is there anything else I can help you with?"
     return resp
 
 def calc_percentage(part, whole):
@@ -215,10 +215,10 @@ def fetch_rupture_criticality(rs, args):
         rup_prob = query_db(sql2)
 
     if rup_prob == 0:
-        resp = "Sorry, I could not calculate the rupture probability."
+        resp = "Sorry, I could not calculate the rupture probability. Is there anything else I can help you with?"
     else:
         rup_prob_per = calc_percentage(rup_prob.decode(), 10)
-        resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%"
+        resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
     return resp
 
 def extract_args_common(args):
