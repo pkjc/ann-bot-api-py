@@ -61,9 +61,10 @@ def reply():
 
     bot.set_subroutine("fetch_patient_data", fetch_patient_data)
     bot.set_subroutine("fetch_rupture_criticality", fetch_rupture_criticality)
-    print("User Query: ", params['queryResult']['queryText'])
+    user_query = params['queryResult']['queryText']
+    print("User Query: ", user_query.lower().replace("_", " "))
     # Get a reply from the bot.
-    reply = bot.reply("user_1", params['queryResult']['queryText'])
+    reply = bot.reply("user_1", user_query.lower().replace("_", " "))
 
     # Get all the user's vars back out of the bot to include in the response.
     uservars = bot.get_uservars("user_1 ")

@@ -45,21 +45,53 @@ def clean_up(txt, term_doc):
 def get_syns(term):
     print(term)
     term_doc = nlp(term)
-    results = get_json(REST_URL + "/search?q=" + term.replace(' ', '+') + "&require_exact_match=true&include=synonym&also_search_properties=true")["collection"]
+    results = get_json(REST_URL + "/search?q=" + term.replace(' ', '+') + "&require_exact_match=true&ontology=SNOMEDCT&also_search_properties=true")["collection"]
+    results1 = get_json(REST_URL + "/search?q=" + "old".replace(' ', '+') + "&require_exact_match=true&ontology=SNOMEDCT&also_search_properties=true")["collection"]
     print("results ", len(results))
+    print("results1 ", len(results))
+    sem_types1 = set()
+    sem_types2 = set()
     syn_list = []
     for res in results:
+        # pprint(res)
+        if "semanticType" in res:
+            sem_types1.update(res["semanticType"])
+                
+    for res in results1:
         if "synonym" in res:
-            syn = res["synonym"]
-            if type(syn) is list:
-                for syn_word in syn:
-                    if syn_word != term:
-                        syn_list.append(clean_up(syn_word, term_doc))
-            else:
-                if syn != term:
-                    syn_list.append(clean_up(syn, term_doc))
+            pprint(res["synonym"])    
+        if "semanticType" in res:
+            sem_types2.update(res["semanticType"])
+        # if "synonym" in res:
+        #     syn = res["synonym"]
+        #     if type(syn) is list:
+        #         for syn_word in syn:
+        #             if syn_word != term:
+        #                 syn_list.append(clean_up(syn_word, term_doc))
+        #     else:
+        #         if syn != term:
+        #             syn_list.append(clean_up(syn, term_doc))
     syno_set = set(filter(None, syn_list))
+
+    # print("sem_types1 ", sem_types1)
+    # print("sem_types2 ", sem_types2)
+    intersec = sem_types1.intersection(sem_types2)
+    print("intersection  ", intersec)
+   
+    for res in results:
+        if "semanticType" in res and any(x in max(intersec,res["semanticType"],key=len) for x in min(intersec,res["semanticType"],key=len)) and "synonym" in res:
+            print(res["prefLabel"])
+
+    for res in results1:
+        if "semanticType" in res and  any(x in max(intersec,res["semanticType"],key=len) for x in min(intersec,res["semanticType"],key=len)) and "synonym" in res:
+            print(res["prefLabel"])
+
     return syno_set
 
-pprint(get_syns("cutaneous melanoma"))
+get_syns("age")
 # get_syns("gender")
+
+def calculate_semantic_sim_sent(sent1, sent2):
+    # tokenize both sentences
+    # strip stop words
+    pass

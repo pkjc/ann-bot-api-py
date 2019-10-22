@@ -6,7 +6,7 @@
 - <call>fetch_rupture_criticality <star></call>
 
 
-// // Checklist before leaving
+// // Conversation
 // + [*] [can you] (give me|what is|what will be|calculate) [the] rupture (criticality|probability) (for|of) (a|this|the following) patient
 // - {topic=rup_prob}{@next}
 

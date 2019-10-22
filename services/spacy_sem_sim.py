@@ -2,24 +2,12 @@ import spacy
 from collections import Counter
 from spacy_wordnet.wordnet_annotator import WordnetAnnotator 
 from pprint import pprint
-# Load an spacy model (supported models are "es" and "en") 
+
 nlp = spacy.load('en_core_web_md')
 nlp.add_pipe(WordnetAnnotator(nlp.lang), after='tagger')
-# token = nlp('prices')[0]
 
-# wordnet object link spacy token with nltk wordnet interface by giving acces to
-# synsets and lemmas 
-# token._.wordnet.synsets()
-# token._.wordnet.lemmas()
-
-# And automatically tags with wordnet domains
-# token._.wordnet.wordnet_domains()
-
-# Imagine we want to enrich the following sentence with synonyms
 sentence = nlp('give me the rupture criticality for a patient whose aneurysm location is superaclanoid internal carotid artery and size is 3.5 and age is 40 and aneurysm is on left side')
 
-# spaCy WordNet lets you find synonyms by domain of interest
-# for example economy
 all_doms = []
 for token in sentence:
     if not token.is_stop and not token.is_punct:

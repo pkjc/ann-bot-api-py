@@ -301,11 +301,11 @@ def findSVOs(tokens):
                                          "!" + v.lower_ if verbNegated or objNegated else v.lower_, to_str(expand(obj, tokens, visited))))
     return svos
 
-str1 = "Give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery."
+str1 = "give me the rupture criticality for a patient whose aneurysm location is anterior_communicating_artery and aneurysm size is tiny and gender is male and the patient has motor_deficits."
 str2 = "Aneurysm size is 3.5 and gender is female and patient has motor deficits."
 str3 = "How many patients are african_american"
 
-tokens1 = nlp(str3)
+tokens1 = nlp(str1)
 svos1 = findSVOs(tokens1)
 print(svos1)
 # tokens2 = nlp(str2)

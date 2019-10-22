@@ -1,11 +1,10 @@
 from nltk.stem.wordnet import WordNetLemmatizer
 import en_core_web_md
-from nltk.util import bigrams
 
 SUBJECTS = ["nsubj", "nsubjpass", "csubj", "csubjpass", "agent", "expl"]
-OBJECTS = ["dobj", "dative", "attr", "oprd"]
+OBJECTS = ["dobj", "dative", "attr", "oprd","pobj"]
 ADJECTIVES = ["acomp", "advcl", "advmod", "amod", "appos", "nn", "nmod", "ccomp", "complm",
-              "hmod", "infmod", "xcomp", "rcmod", "poss"," possessive"]
+              "hmod", "infmod", "xcomp", "rcmod", "poss"," possessive", "npadvmod", "nummod", "quantmod"]
 COMPOUNDS = ["compound"]
 PREPOSITIONS = ["prep"]
 
@@ -162,7 +161,8 @@ def getAllObjsWithAdjectives(v):
 
 def findSVOs(tokens):
     svos = []
-    verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
+    # verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
+    verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
     for v in verbs:
         subs, verbNegated = getAllSubs(v)
         # hopefully there are subs, if not, don't examine this verb any longer
@@ -176,7 +176,8 @@ def findSVOs(tokens):
 
 def findSVAOs(tokens):
     svos = []
-    verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
+    # verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
+    verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
     for v in verbs:
         subs, verbNegated = getAllSubs(v)
         # hopefully there are subs, if not, don't examine this verb any longer
@@ -220,7 +221,7 @@ nlp = en_core_web_md.load()
 # identify noun phrases and add _ between the words to mark them as noun phrases
 
 s1 = u"""
-How many patients are 30 years old?
+give me the rupture criticality for a case where aneurysm is 3.5 mm and he has hypertension and multiple aneurysms
 """
 s2 = u"gender is female"
 s3 = u"patient has motor_deficits"

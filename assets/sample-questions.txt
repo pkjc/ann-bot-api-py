@@ -1,27 +1,20 @@
 // WORKING QUERIES - START
 
-give me the rupture criticality for a patient whose aneurysm location is 
-anterior communicating artery and size is 3.5 and gender is female and whose age is 
-35 and whose aneurysm is on left side and patient has motor deficits and patient was a smoker
+give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and gender is female and whose age is 35 and whose aneurysm is on left side and patient has motor deficits and patient was a smoker
 
 // RULE 1
-give me the rupture criticality for a patient whose aneurysm location is 
-anterior communicating artery and size is 3.5 and gender is female and patient has motor deficits
+give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and gender is female and patient has motor deficits
 
 // RULE 2
-give me the rupture criticality for a patient whose aneurysm location 
-is anterior communicating artery and size is 3.5 and race is african american and age is 40
+give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and race is african american and age is 40
 
 // RULE 3
-give me the rupture criticality for a patient whose aneurysm location 
-is anterior communicating artery and size is 3.5 and race is african american and patient is a smoker
+give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and race is african american and patient is a smoker
 
 // RULE 
-give me the rupture criticality for a patient whose aneurysm location 
-is paraclinoid and size is 3.5 and patient has hypertension and patient has multiple aneurysms 
+give me the rupture criticality for a patient whose aneurysm location is paraclinoid and size is 3.5 and patient has hypertension and patient has multiple aneurysms 
 
-give me the rupture criticality for a patient whose aneurysm location 
-is superaclanoid internal carotid artery and size is 3.5 and age is 40 and aneurysm is on left side
+give me the rupture criticality for a patient whose aneurysm location is superaclanoid internal carotid artery and size is 3.5 and age is 40 and aneurysm is on left side
 
 Click==7.0
 Flask==1.1.1
