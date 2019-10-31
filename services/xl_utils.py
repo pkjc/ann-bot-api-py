@@ -1,22 +1,23 @@
 # Program extracting first column 
 import xlrd 
 
-def write_to_file(line):
-    with open("rupture_prediction_rules.txt", "w") as text_file:
-        print(line, file=text_file)
+# def write_to_file(line):
+#     with open("rupture_prediction_rules.txt", "w") as text_file:
+#         print(line, file=text_file)
 
 def read_xl():
-    loc = ("Rule_Matrix_final.xlsx")
+    loc = ("assets/ACOA_Rule_Matrix_1358.xlsx")
     wb = xlrd.open_workbook(loc) 
-    sheet = wb.sheet_by_index(6) 
-    with open("rupture_prediction_rules.txt", "w") as rules_file:
+    sheet = wb.sheet_by_index(0) 
+    with open("ACOA_Rule_Matrix_1358.txt", "w") as rules_file:
         for i in range(sheet.nrows):
             row_val = ''
-            for j in range(sheet.ncols):
+            for j in range(2):
                 if(type(sheet.cell_value(i, j)) == float):
                     row_val += str(sheet.cell_value(i, j)) + ' '
                 else:
-                    row_val += sheet.cell_value(0, j) + ' ' + sheet.cell_value(i, j) + ' '
+                    # row_val += sheet.cell_value(0, j) + ' ' + sheet.cell_value(i, j) + ' '
+                    row_val += sheet.cell_value(i, j) + ' '
 
                 if(j == sheet.ncols - 2):
                     row_val = row_val.strip() + '\t'

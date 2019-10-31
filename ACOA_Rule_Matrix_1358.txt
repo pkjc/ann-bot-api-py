@@ -1,0 +1,38 @@
+1	Gender Female Age Category Standard Adult Size Category NB Small  
+2	Gender Female Multiple Aneurysms No Size Category NB Small  
+3	Gender Female Hypertension No Age Category Standard Adult  
+4	Gender Female Age Category Standard Adult Side Left  
+5	Gender Female Side Right Multiple Aneurysms No  
+6	Gender Female Multiple Aneurysms No Race White/Caucasian  
+7	Age Category Standard Adult Multiple Aneurysms No Size Category NB Small  
+8	Age Category Standard Adult Size Category NB Small Race White/Caucasian  
+9	Gender Male Age Category Standard Adult Size Category NB Small  
+10	Gender Male Age Category Standard Adult Hypertension Yes  
+11	Gender Male Age Category Standard Adult Multiple Aneurysms No  
+12	Gender Male Age Category Standard Adult Side Left  
+13	Gender Male Multiple Aneurysms No Hypertension Yes  
+14	Hypertension Yes Age Category Standard Adult Multiple Aneurysms No  
+15	Gender Male Multiple Aneurysms No Side Left  
+16	Hypertension No Size Category NB Small Age Category Standard Adult  
+17	Smoking History Current Smoker Age Category Standard Adult Size Category NB Small  
+18	Side Right Multiple Aneurysms No Age Category Standard Adult  
+19	Age Category Standard Adult Size Category NB Small Side Left  
+20	Age Category Standard Adult Multiple Aneurysms No Race White/Caucasian  
+21	Hypertension Yes Smoking History Current Smoker Multiple Aneurysms No  
+22	Hypertension No Multiple Aneurysms No Size Category NB Small  
+23	Hypertension Yes Multiple Aneurysms No Side Left  
+24	Hypertension Yes Side Right Multiple Aneurysms No  
+25	Smoking History Current Smoker Multiple Aneurysms No Size Category NB Small  
+26	Multiple Aneurysms No Size Category NB Small Side Left  
+27	Side Right Multiple Aneurysms No Race White/Caucasian  
+28	Side Right Multiple Aneurysms No Size Category NB Small  
+29	Hypertension No Side Left Age Category Standard Adult  
+30	Race White/Caucasian Age Category Standard Adult Hypertension No  
+31	Hypertension Yes Smoking History Current Smoker Age Category Standard Adult  
+32	Age Category Standard Adult Multiple Aneurysms No Side Left  
+33	Age Category Standard Adult Side Left Race White/Caucasian  
+34	Hypertension No Multiple Aneurysms No Side Left  
+35	Hypertension No Multiple Aneurysms No Race White/Caucasian  
+36	Hypertension Yes Multiple Aneurysms No Race Black/African American  
+37	Smoking History Current Smoker Side Right Multiple Aneurysms No  
+38	Multiple Aneurysms No Side Left Race White/Caucasian  

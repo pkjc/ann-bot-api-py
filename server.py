@@ -18,7 +18,8 @@ from services.d2v2 import make_rules_dict
 from services.SpacySimilarity import calculate_similarity
 from services.SpacySimilarity import process_text
 from services.svo_extraction import findSVAOs
-# from services.enrichment import onto_based_enrichment
+from services.RuleBasedProbablisticReasoner import combined_rupture_probability
+from services.enrichment import make_terms_list
 
 lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
 # Set up the RiveScript bot. This loads the replies from `/eg/brain` of the
@@ -169,12 +170,27 @@ def map_spo_to_sql_rup(spo_list):
 
 max_score_rule_glo = ''
 user_query_glo = ''
-
+locations = ['MCA', 'anterior communicating artery', 'paraclinoid']
 def combined_rupture_criticality(rs, args):
-    print('args: ', args[0])
+    # print('args: ', args[0])
     if args[0].lower() == 'yes':
+        # Find rules matched
+        doc = nlp(user_query_glo)
+        for term in make_terms_list(doc):
+            if term in locations and term == locations[0]:
+                print('mca')
+                combined_rupture_probability('R1,R2', "MCA")[0][1]
+            elif term in locations and term == locations[1]:
+                print('acom')
+                combined_rupture_probability('R1,R2', "ACOM")[0][1]
+            elif term in locations and term == locations[2]:
+                print('pcom')
+                combined_rupture_probability('R1,R2', "PCOM")[0][1]
+        
         print('raw_uq: ', user_query_glo)
-        print('max_score_rule_glo: ', max_score_rule_glo)
+        
+        print('combined: ', combined_rupture_probability('R1,R2', "MCA")[0][0])
+
         return "hello"
     elif args[0].lower() == 'no': 
         print(max_score_rule_glo)
