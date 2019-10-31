@@ -1,8 +1,8 @@
-import spacy
-from services.Bioportal import get_semantically_similar_terms
+# import spacy
+# from services.Bioportal import get_semantically_similar_terms
 from spacy.lang.en.stop_words import STOP_WORDS
-from services.txt_cleanup_utils import replace_tokens
-from spacy_wordnet.wordnet_annotator import WordnetAnnotator 
+# from services.txt_cleanup_utils import replace_tokens
+# from spacy_wordnet.wordnet_annotator import WordnetAnnotator 
 
 # def enrich_sentence(sentence):
 #     # Load an spacy model (supported models are "es" and "en") 
