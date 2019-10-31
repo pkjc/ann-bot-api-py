@@ -1,7 +1,7 @@
 import nltk
 from nltk.stem.wordnet import WordNetLemmatizer
 import en_core_web_md
-from textblob import TextBlob
+# from textblob import TextBlob
 
 SUBJECTS = ["nsubj", "nsubjpass", "csubj", "csubjpass", "agent", "expl"]
 OBJECTS = ["dobj", "dative", "attr", "oprd","pobj"]
