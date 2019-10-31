@@ -26,20 +26,22 @@ import spacy
 
 
 @plac.annotations(model=("Model to load", "positional", None, str))
-def main(model="en_core_web_sm"):
+def main(model="en_core_web_md"):
     nlp = spacy.load(model)
     print("Loaded model '%s'" % model)
 
     doc = nlp(
-        "displaCy uses CSS and JavaScript to show you how computers "
-        "understand language"
+        "Give me the rupture probability for a patient whose age is 30, aneurysm location is anterior communicating artery, gender is male and he is a smoker"
     )
+
+    for sent in doc.sents:
+        print(sent.text)
 
     # The easiest way is to find the head of the subtree you want, and then use
     # the `.subtree`, `.children`, `.lefts` and `.rights` iterators. `.subtree`
     # is the one that does what you're asking for most directly:
     for word in doc:
-        if word.dep_ in ("xcomp", "ccomp"):
+        if word.dep_ in ("xcomp", "ccomp", "conj"):
             print("".join(w.text_with_ws for w in word.subtree))
 
     # It'd probably be better for `word.subtree` to return a `Span` object

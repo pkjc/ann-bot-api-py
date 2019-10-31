@@ -304,8 +304,9 @@ def findSVOs(tokens):
 str1 = "give me the rupture criticality for a patient whose aneurysm location is anterior_communicating_artery and aneurysm size is tiny and gender is male and the patient has motor_deficits."
 str2 = "Aneurysm size is 3.5 and gender is female and patient has motor deficits."
 str3 = "How many patients are african_american"
+str4 = "how many patients are over the age of 50?"
 
-tokens1 = nlp(str1)
+tokens1 = nlp(str4)
 svos1 = findSVOs(tokens1)
 print(svos1)
 # tokens2 = nlp(str2)

@@ -1,5 +1,7 @@
+import nltk
 from nltk.stem.wordnet import WordNetLemmatizer
 import en_core_web_md
+from textblob import TextBlob
 
 SUBJECTS = ["nsubj", "nsubjpass", "csubj", "csubjpass", "agent", "expl"]
 OBJECTS = ["dobj", "dative", "attr", "oprd","pobj"]
@@ -79,7 +81,8 @@ def getObjsFromPrepositions(deps):
     objs = []
     for dep in deps:
         if dep.pos_ == "ADP" and dep.dep_ == "prep":
-            objs.extend([tok for tok in dep.rights if tok.dep_  in OBJECTS or (tok.pos_ == "PRON" and tok.lower_ == "me")])
+            # objs.extend([tok for tok in dep.rights if tok.dep_  in OBJECTS or (tok.pos_ == "PRON" and tok.lower_ == "me")])
+            objs.extend([tok for tok in dep.rights if tok.dep_  in OBJECTS or (tok.pos_ == "PRON")])
     return objs
 
 def getAdjectives(toks):
@@ -120,6 +123,8 @@ def getObjFromXComp(deps):
 def getAllSubs(v):
     verbNegated = isNegated(v)
     subs = [tok for tok in v.lefts if tok.dep_ in SUBJECTS and tok.pos_ != "DET"]
+    # subs = [tok for tok in v.lefts if tok.dep_ in SUBJECTS]
+ 
     if len(subs) > 0:
         subs.extend(getSubsFromConjunctions(subs))
     else:
@@ -161,8 +166,8 @@ def getAllObjsWithAdjectives(v):
 
 def findSVOs(tokens):
     svos = []
-    # verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
-    verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
+    verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
+    # verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
     for v in verbs:
         subs, verbNegated = getAllSubs(v)
         # hopefully there are subs, if not, don't examine this verb any longer
@@ -176,8 +181,8 @@ def findSVOs(tokens):
 
 def findSVAOs(tokens):
     svos = []
-    # verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
-    verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
+    verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
+    # verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
     for v in verbs:
         subs, verbNegated = getAllSubs(v)
         # hopefully there are subs, if not, don't examine this verb any longer
@@ -215,17 +220,44 @@ def generate_left_right_adjectives(obj):
 
     return obj_desc_tokens
 
+# Experimental
+# def findSubsAndObjs(doc):
+#     # subs = [tok for tok in doc.noun_chunks]
+#     subs = ([tok for tok in doc if tok.dep_ in SUBJECTS])
+#     adjs = [tok for tok in doc if tok.dep_ in ADJECTIVES]
+#     objs = [tok for tok in doc if tok.dep_ in OBJECTS]
+#     print(subs)
+#     print(adjs)
+#     print(objs)
 
-nlp = en_core_web_md.load()
+# def tokenize_sentences(document):
+#     sentences = nltk.sent_tokenize(document)
+#     sentences = [nltk.word_tokenize(sent) for sent in sentences]
+#     return sentences
 
-# identify noun phrases and add _ between the words to mark them as noun phrases
+# def get_entities(document):
+#     """Returns Named Entities using NLTK Chunking"""
+#     entities = []
+#     sentences = tokenize_sentences(document)
 
-s1 = u"""
-give me the rupture criticality for a case where aneurysm is 3.5 mm and he has hypertension and multiple aneurysms
-"""
-s2 = u"gender is female"
-s3 = u"patient has motor_deficits"
-s4 = u"aneurysm location is not anterior_communicating_artery"
+#     # Part of Speech Tagging
+#     sentences = [nltk.pos_tag(sent) for sent in sentences]
+#     for tagged_sentence in sentences:
+#         for chunk in nltk.ne_chunk(tagged_sentence):
+#             if type(chunk) == nltk.tree.Tree:
+#                 entities.append(' '.join([c[0] for c in chunk]).lower())
+#     return entities
 
-doc = nlp(s1)
-print(findSVAOs(doc))
+# nlp = en_core_web_md.load()
+
+# # identify noun phrases and add _ between the words to mark them as noun phrases
+
+# s1 = u"""
+# give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and gender is female and whose age is 35 and whose aneurysm is on left side and patient has motor deficits and patient was a smoker
+# """
+# s2 = u"gender is female"
+# s3 = u"patient has motor_deficits"
+# s4 = u"aneurysm location is not anterior_communicating_artery"
+
+# doc = nlp(s1)
+# print(findSVAOs(doc))

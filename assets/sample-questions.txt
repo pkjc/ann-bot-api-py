@@ -16,6 +16,9 @@ give me the rupture criticality for a patient whose aneurysm location is paracli
 
 give me the rupture criticality for a patient whose aneurysm location is superaclanoid internal carotid artery and size is 3.5 and age is 40 and aneurysm is on left side
 
+
+Calculate the probability of rupture of an aneurysm that is 3.5 mm in size and is located in the superaclanoid internal carotid artery and it is asymptomatic. The patient's age is 40 and gender is male.
+
 Click==7.0
 Flask==1.1.1
 gunicorn==19.9.0
@@ -71,6 +74,9 @@ how many patients have gender as unknown
 // WORKING QUERIES - END
 
 how many patients whose aneurysm ruptured are over the age of 50
+
+
+
 how many patients whose aneurysm ruptured are over 50
 
 how many patients have smoking habit as current smoker

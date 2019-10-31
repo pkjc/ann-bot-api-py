@@ -11,8 +11,14 @@ import json
 from rivescript import RiveScript
 import mysql.connector
 from models.SubPreObj import SubPreObj
+import spacy
 from spacy.lemmatizer import Lemmatizer
 from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
+from services.d2v2 import make_rules_dict
+from services.SpacySimilarity import calculate_similarity
+from services.SpacySimilarity import process_text
+from services.svo_extraction import findSVAOs
+# from services.enrichment import onto_based_enrichment
 
 lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
 # Set up the RiveScript bot. This loads the replies from `/eg/brain` of the
@@ -33,6 +39,9 @@ myDB = mysql.connector.connect(
 
 app = Flask(__name__)
 
+nlp = spacy.load("en_core_web_md")
+nlp.Defaults.stop_words.remove("side")
+
 @app.route("/reply", methods=["POST"])
 def reply():
     params = request.json
@@ -43,29 +52,14 @@ def reply():
             "error": "Request must be of the application/json type!",
         })
 
-    # username = params.get("username")
-    # message  = params.get("message")
-    # uservars = params.get("vars", dict())
-
-    # Make sure the required params are present.
-    # if username is None or message is None:
-    #     return jsonify({
-    #         "status": "error",
-    #         "error": "username and message are required keys",
-    #     })
-
-    # Copy and user vars from the post into RiveScript.
-    # if type(uservars) is dict:
-    #     for key, value in uservars.items():
-    #         bot.set_uservar(username, key, value)
-
     bot.set_subroutine("fetch_patient_data", fetch_patient_data)
     bot.set_subroutine("fetch_rupture_criticality", fetch_rupture_criticality)
+    bot.set_subroutine("combined_rupture_criticality", combined_rupture_criticality)
     user_query = params['queryResult']['queryText']
-    print("User Query: ", user_query.lower().replace("_", " "))
+    raw_uq = user_query.lower().replace("_", " ")
+    bot.set_uservar("user_1", "raw_uq", raw_uq)
     # Get a reply from the bot.
-    reply = bot.reply("user_1", user_query.lower().replace("_", " "))
-
+    reply = bot.reply("user_1", raw_uq)
     # Get all the user's vars back out of the bot to include in the response.
     uservars = bot.get_uservars("user_1 ")
     # print("print(reply) ", reply)
@@ -85,49 +79,25 @@ def fetch_patient_data(rs, args):
 def calc_percentage(part, whole):
   return 100 * float(part)/float(whole)
 
-# def fetch_rupture_criticality(rs, args):
-#     query = ""
-#     for s in args:
-#         query += s + " "
-#     # print(query)
-#     args_dict = {}
-#     for s in query.split('and'):
-#         print(s)
-#         args_dict[s.split('is')[0].strip()] = s.split('is')[1].strip()
-#     pprint(args_dict)
-#     rup_prob = query_db_rup1(args_dict)
-#     if(rup_prob == 0):
-#         resp = "Could not calculate the rupture probability for the given input."
-#     else:
-#         resp = "The rupture probablity for this patient is about " + str(rup_prob) + "%"
-#     print("print(resp) ", resp)
-#     return resp
-
-# def fetch_rupture_criticality(rs, args):
-#     print('===============\n', 'IDENTIFIED VARS')
-#     for key in rs.get_uservars('user_1'):
-#         if('__lastmatch__' in key or 'topic' in key or '__history__' in key):
-#             continue
-#         else:
-#             print(key, " : ", rs.get_uservar('user_1',key))
-#             # pprint(rs.get_uservars(key))
-#     print('===============')
-#     resp="Thanks!"
-#     return resp
-
-def find_age_mapping(obj):
-    size_val = int(obj)
-    size_val = size_val / 10
+def find_size_mapping(obj):
+    if is_float(obj):
+        size_val = float(obj)
+    elif is_int(obj):
+        size_val = int(obj)
+    else:
+        return obj    
     if(size_val <= 5):
         return "tiny"
-    elif(4 <= size_val <= 8):
+    elif(5 < size_val <= 8):
         return "small"
-    elif(8 <= size_val <= 14):
+    elif(8 < size_val <= 14):
         return "medium"
-    elif(14 <= size_val <= 22):
+    elif(14 < size_val < 22):
         return "large"
     elif(size_val >= 22):
         return "giant"
+    else:
+        return obj
 
 def find_mapping(obj):
     if "motor" in obj:
@@ -139,15 +109,32 @@ def find_mapping(obj):
     elif "multiple aneurysms" in obj:
         return 'multiple_aneurysms_yes'
     else: 
-        age_val = int(obj)
+        if is_int(obj):
+            age_val = int(obj)
+        else:
+            return obj    
         if( 38 <= age_val <= 58):
-            return "age_category_generation_x"
+            return "category generation x"
         elif(age_val <= 37):
-            return "age_category_generation_y"
+            return "category generation y"
         elif(age_val >= 74):
-            return "age_category_silent_generation"
+            return "age category silent generation"
         elif(56 <= age_val <= 73):
-            return "age_category_baby_boomers"
+            return "age category baby boomers"
+
+def is_float(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+def is_int(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 def map_spo_to_sql_rup(spo_list):
     loc = ''
@@ -160,7 +147,7 @@ def map_spo_to_sql_rup(spo_list):
         if "location" in sub:
             loc = obj
         elif "size" in sub:
-            size = find_age_mapping(obj)
+            size = find_size_mapping(obj)
         else:
             for s in rem_list:
                 if s in sub:
@@ -179,48 +166,130 @@ def map_spo_to_sql_rup(spo_list):
     print('sql1', sql1)
     print('sql2', sql2)
     return sql1, sql2
-# NEW
+
+max_score_rule_glo = ''
+user_query_glo = ''
+
+def combined_rupture_criticality(rs, args):
+    print('args: ', args[0])
+    if args[0].lower() == 'yes':
+        print('raw_uq: ', user_query_glo)
+        print('max_score_rule_glo: ', max_score_rule_glo)
+        return "hello"
+    elif args[0].lower() == 'no': 
+        print(max_score_rule_glo)
+        rup_prob_per = calc_percentage(max_score_rule_glo, 1)
+        resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
+        return resp
+
+# V2.0
 def fetch_rupture_criticality(rs, args):
-    possible_subs = ['aneurysm', 'location', 'age', 'gender', 'smoking', 
-    'history', 'smoking', 'habit', 'race', 'size', 'side', 'patient']
-    possible_preds = ['is', 'greater', 'over', 'under', 'less than', 'has', 'between', 'had', 'was']
-    stop_words = ['what','how','of','a','an','the','me','tell','can','you','are','were', 
-    'ages', 'age', 'aged', 'gender', 'genders', 'race', 'disease', 'and', 'whose', 'who', 'on']
-    sub = ''
-    pre = ''
-    obj = ''
-    spo_list = []
-    if 'size' not in args or 'location' not in args: return "Size or Location of Aneurysm is missing. Please retry with the corrected query" 
-    for arg in args:
-        if arg == "and":
-            spo_list.append(SubPreObj(sub.strip(),lemmatizer(pre.strip(), u"VERB")[0],obj.strip()))
-            sub = ''
-            pre = ''
-            obj = ''
-        if arg in possible_subs:
-            sub = sub + ' ' +arg      
-        elif arg in possible_preds:
-            pre = pre + ' ' +arg
-        elif arg in stop_words:
-            continue
-        else:
-            obj = obj + ' ' + arg
+    raw_uq = rs.get_uservar("user_1", "raw_uq")
+    global user_query_glo 
+    user_query_glo = raw_uq
+    rup_prob = 0
+    # stop word removal
+    # replace tokens expand contractions
+    # Enrichment of user query using a medical ontology
+    # onto_based_enrichment(sentence)
+    uq = ' '.join(raw_uq.split())
+    uq = process_text(uq, nlp)
+
+    uq_list = uq.split()
+    ind = uq_list.index('size')
+    if ind != -1:
+        uq = uq.replace(uq_list[ind+1], find_size_mapping(uq_list[ind+1]))
+    ind_age = uq_list.index('age')
+    if ind_age != -1:
+       uq = uq.replace(uq_list[ind_age+1], find_mapping(uq_list[ind_age+1]))
+
+    rules_dict = make_rules_dict("")
+    max_score = 0.0
+    max_overlap_len = 0
+    max_score_rule = ""
+    max_overlap_rule = ""
+    rul_score_dict = {}
+    for rule in rules_dict:
+        uq_set = set(args)
+        rule_set = set(rule.split())
+        overlap = uq_set.intersection(rule_set)
+        score = calculate_similarity(uq, rule, nlp)
+        rul_score_dict[rule] = score
+        # print(rule, score)
+        if score > max_score:
+            max_score = score
+            max_score_rule = rule
+        # if len(overlap) > max_overlap_len:
+        #     max_overlap_len = len(overlap)
+        #     max_overlap_rule = rule
+    global max_score_rule_glo 
+    max_score_rule_glo = rules_dict[max_score_rule]
+    # print(uq," | ",max_score_rule," | ",max_score," | ",rules_dict[max_score_rule])
+    # print(uq," | ",max_overlap_rule," | ",max_overlap_len," | ",rules_dict[max_overlap_rule])
     
-    if sub or pre or obj:
-        spo_list.append(SubPreObj(sub.strip(),lemmatizer(pre.strip(), u"VERB")[0],obj.strip()))
+    # print(rul_score_dict)
+    count = 0
+    for w in sorted(rul_score_dict, key=rul_score_dict.get, reverse=True):
+        if rul_score_dict[w] > 0.9:
+            count = count + 1
+            # print(w, rul_score_dict[w])
+    print(count)
+    if count == 1:
+        rup_prob_per = calc_percentage(list(rul_score_dict.values())[0].decode(), 1)
+        resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
+        return resp
+    elif count > 1:
+        resp = "Multiple prediction rules matched for your query. Do you to get a combined rupture probability?"
+        return resp
 
-    pprint(spo_list)
-    sql1, sql2 = map_spo_to_sql_rup(spo_list)
-    rup_prob = query_db(sql1)
-    if(rup_prob == 0):
-        rup_prob = query_db(sql2)
-
+    # Response
     if rup_prob == 0:
         resp = "Sorry, I could not calculate the rupture probability. Is there anything else I can help you with?"
-    else:
-        rup_prob_per = calc_percentage(rup_prob.decode(), 10)
-        resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
+    
     return resp
+
+# V1.0
+# def fetch_rupture_criticality(rs, args):
+#     possible_subs = ['aneurysm', 'location', 'age', 'gender', 'smoking', 
+#     'history', 'smoking', 'habit', 'race', 'size', 'side', 'patient']
+#     possible_preds = ['is', 'greater', 'over', 'under', 'less than', 'has', 'between', 'had', 'was']
+#     stop_words = ['what','how','of','a','an','the','me','tell','can','you','are','were', 
+#     'ages', 'age', 'aged', 'gender', 'genders', 'race', 'disease', 'and', 'whose', 'who', 'on']
+#     sub = ''
+#     pre = ''
+#     obj = ''
+#     spo_list = []
+#     if 'size' not in args or 'location' not in args: return "Size or Location of Aneurysm is missing. Please retry with the corrected query" 
+#     for arg in args:
+#         if arg == "and":
+#             spo_list.append(SubPreObj(sub.strip(),lemmatizer(pre.strip(), u"VERB")[0],obj.strip()))
+#             sub = ''
+#             pre = ''
+#             obj = ''
+#         if arg in possible_subs:
+#             sub = sub + ' ' +arg      
+#         elif arg in possible_preds:
+#             pre = pre + ' ' +arg
+#         elif arg in stop_words:
+#             continue
+#         else:
+#             obj = obj + ' ' + arg
+    
+#     if sub or pre or obj:
+#         spo_list.append(SubPreObj(sub.strip(),lemmatizer(pre.strip(), u"VERB")[0],obj.strip()))
+
+#     pprint(spo_list)
+#     sql1, sql2 = map_spo_to_sql_rup(spo_list)
+#     rup_prob = query_db(sql1)
+#     if(rup_prob == 0):
+#         rup_prob = query_db(sql2)
+
+#     if rup_prob == 0:
+#         resp = "Sorry, I could not calculate the rupture probability. Is there anything else I can help you with?"
+#     else:
+#         rup_prob_per = calc_percentage(rup_prob.decode(), 10)
+#         resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
+#     return resp
 
 def extract_args_common(args):
     pat_feats = ['gender','age','race','speech deficits','motor deficits','sensory deficits','diabetes', 
@@ -426,3 +495,51 @@ def index(path=None):
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
+
+
+
+    # username = params.get("username")
+    # message  = params.get("message")
+    # uservars = params.get("vars", dict())
+
+    # Make sure the required params are present.
+    # if username is None or message is None:
+    #     return jsonify({
+    #         "status": "error",
+    #         "error": "username and message are required keys",
+    #     })
+
+    # Copy and user vars from the post into RiveScript.
+    # if type(uservars) is dict:
+    #     for key, value in uservars.items():
+    #         bot.set_uservar(username, key, value)
+
+    # def fetch_rupture_criticality(rs, args):
+#     query = ""
+#     for s in args:
+#         query += s + " "
+#     # print(query)
+#     args_dict = {}
+#     for s in query.split('and'):
+#         print(s)
+#         args_dict[s.split('is')[0].strip()] = s.split('is')[1].strip()
+#     pprint(args_dict)
+#     rup_prob = query_db_rup1(args_dict)
+#     if(rup_prob == 0):
+#         resp = "Could not calculate the rupture probability for the given input."
+#     else:
+#         resp = "The rupture probablity for this patient is about " + str(rup_prob) + "%"
+#     print("print(resp) ", resp)
+#     return resp
+
+# def fetch_rupture_criticality(rs, args):
+#     print('===============\n', 'IDENTIFIED VARS')
+#     for key in rs.get_uservars('user_1'):
+#         if('__lastmatch__' in key or 'topic' in key or '__history__' in key):
+#             continue
+#         else:
+#             print(key, " : ", rs.get_uservar('user_1',key))
+#             # pprint(rs.get_uservars(key))
+#     print('===============')
+#     resp="Thanks!"
+#     return resp

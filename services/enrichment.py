@@ -1,7 +1,8 @@
 import spacy
-from spacy_wordnet.wordnet_annotator import WordnetAnnotator 
-from Bioportal import get_syns
+from services.Bioportal import get_semantically_similar_terms
 from spacy.lang.en.stop_words import STOP_WORDS
+from services.txt_cleanup_utils import replace_tokens
+from spacy_wordnet.wordnet_annotator import WordnetAnnotator 
 
 # def enrich_sentence(sentence):
 #     # Load an spacy model (supported models are "es" and "en") 
@@ -37,6 +38,8 @@ from spacy.lang.en.stop_words import STOP_WORDS
 #     # Let's see our enriched sentence
 #     return ' '.join(enriched_sentence)
 
+nlp = spacy.load('en_core_web_md')
+nlp.add_pipe(WordnetAnnotator(nlp.lang), after='tagger')
 
 def remove_stopwords(txt):
     txt = txt.lower()
@@ -49,31 +52,58 @@ def remove_stopwords(txt):
                 filtered.append(tok)
         return ' '.join(filtered)
 
-
 def make_terms_list(sentence):
-    nlp = spacy.load('en_core_web_md')
-    sentence = nlp(sentence)
     term_list =[]
     for chunk in sentence.noun_chunks:
         filtered_txt = remove_stopwords(chunk.text)
         if not filtered_txt:
             continue
         else:
-            term_list.append(filtered_txt)
+            if len(filtered_txt.split()) > 1:
+                term_list.append(filtered_txt)
     return set(term_list)
 
-def enrich_sentence_biop(sentence):
-    terms_list = make_terms_list(sentence)
-    enriched_sentence = []
-    for term in terms_list:
-        synonyms = get_syns(term)
-        enriched_sentence.append(term)
-        if synonyms:
-            for s in synonyms:
-                enriched_sentence.append('{}'.format(s + ' '))
+def onto_based_enrichment(sent):
+    # 2.	Run the NLP pipeline on S
+    sent_nlp = nlp(sent)
+    # 3.	Make a list of all the nouns and noun chunks identified in the NLP pipeline
+    # 4.	Get a list of multi-word concepts - See Algorithm 2
+    term_list = set()
+    term_list = make_terms_list(sent_nlp)
+    # 5.	For each term in the noun list:
+    # for token in sent_nlp:
+    #     if token.pos_ is 'NOUN' or token.pos_ is 'ADJ':
+    #         term_list.add(token.lemma_)
+    print(term_list)
+    syno_lst = []
+    for term in term_list:
+        sent = sent.replace(term, ' ' + term + ' '.join(get_semantically_similar_terms(term, nlp)))
+        # syno_lst.extend(get_semantically_similar_terms(term, nlp))
+        # syno_lst.extend(wordnet_enrichment(term))
+    term_list.update(syno_lst)
+    return sent
 
-    # Let's see our enriched sentence
-    return ' '.join(enriched_sentence)
+def wordnet_enrichment(token):
+    token = nlp(token)
+    medical_domains = ['medicine', 'health', 'surgery', 'physiology', 'radiology','anatomy']
+    synsets = token._.wordnet.wordnet_synsets_for_domain(medical_domains)
+    if synsets:
+        lemmas_for_synset = []
+        for s in synsets:
+            lemmas_for_synset.extend(s.lemma_names())
+        print(token, lemmas_for_synset)
+
+print(onto_based_enrichment("give me the rupture criticality for a patient whose aneurysm location is superaclanoid internal carotid artery and size is 3.5 and age is 40 and aneurysm is on left side"))
 
 
-print(enrich_sentence_biop('What is the rupture criticality of a patient whose aneurysm location is anterior communicating artery and age is 30?'))
+# def enrich_sentence_biop(sentence):
+#     terms_list = make_terms_list(sentence)
+#     enriched_sentence = []
+#     for term in terms_list:
+#         synonyms = get_syns(term)
+#         enriched_sentence.append(term)
+#         if synonyms:
+#             for s in synonyms:
+#                 enriched_sentence.append('{}'.format(s + ' '))
+#     # Let's see our enriched sentence
+#     return ' '.join(enriched_sentence)

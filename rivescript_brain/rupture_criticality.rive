@@ -2,9 +2,12 @@
 ! array param_vals = anterior communicating artery|tiny|female|yes
 ! array gender = male|female|unknown
 
-+ [*] rupture criticality [*] patient *
++ [*] rupture [criticality|probability|possibility] *
 - <call>fetch_rupture_criticality <star></call>
 
++ *
+% multiple prediction rules matched for your query do you to get a combined rupture probability
+- <call>combined_rupture_criticality <star></call>
 
 // // Conversation
 // + [*] [can you] (give me|what is|what will be|calculate) [the] rupture (criticality|probability) (for|of) (a|this|the following) patient

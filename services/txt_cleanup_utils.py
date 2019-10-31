@@ -16,13 +16,13 @@ def replace_tokens(txt):
         # Remove double dashes
         "--": " ",
         # Remove possesive splits
-        " 's ": " ",
+        "'s": " ",
         # Remove quotes
         "'": "",
         '"': "",
     }
     for key, val in replace_dict.items():
-            txt = txt.replace(key, val)
+        txt = txt.replace(key, val)
 
     # Remove blank tokens, but keep line breaks
     doc = [
