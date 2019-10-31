@@ -1,4 +1,4 @@
-from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+# from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.corpus import stopwords 
 # from services.Doc2VecHelper import Doc2VecHelper
