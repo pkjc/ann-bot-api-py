@@ -22,8 +22,8 @@ def get_related_wiki_pages(seed_page):
             continue
     return wiki_pages
 
-wp_for_training = []
-wp_for_training.extend(get_related_wiki_pages("Aneurysm"))
+# wp_for_training = []
+# wp_for_training.extend(get_related_wiki_pages("Aneurysm"))
 
 
 
