@@ -1,3 +1,4 @@
+beautifulsoup4==4.8.0
 bleach==3.1.0
 blis==0.2.4
 boto==2.49.0
@@ -12,9 +13,13 @@ cytoolz==0.10.0
 decorator==4.4.0
 defusedxml==0.6.0
 docutils==0.15.2
+en-core-web-lg==2.1.0
+en-core-web-md==2.1.0
+en-core-web-sm==2.1.0
 entrypoints==0.3
 flashtext==2.7
 Flask==1.1.1
+gensim==3.8.0
 gunicorn==19.9.0
 idna==2.8
 ipython-genutils==0.2.0
@@ -29,11 +34,15 @@ MarkupSafe==1.1.1
 mistune==0.8.4
 murmurhash==1.0.2
 mysql-connector==2.2.9
+nbconvert==5.6.0
+nbformat==4.4.0
 networkx==2.4
+nlpre==2.1.1
 nltk==3.3
 numpy==1.17.2
 pandas==0.25.2
 pandocfilters==1.4.2
+plac==0.9.6
 preshed==2.0.1
 pyemd==0.5.1
 Pygments==2.4.2
@@ -51,12 +60,13 @@ six==1.11.0
 sklearn==0.0
 smart-open==1.8.4
 soupsieve==1.9.3
-spacy>=2.2.0,<3.0.0
+spacy==2.1.0,<3.0.0
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm
 spacy-wordnet==0.0.4
 srsly==0.1.0
 testpath==0.4.2
 textacy==0.9.1
+textblob==0.15.3
 thinc==7.0.8
 toolz==0.10.0
 tqdm==4.35.0
@@ -66,4 +76,5 @@ urllib3==1.25.3
 wasabi==0.2.2
 webencodings==0.5.1
 Werkzeug==0.15.5
+wikipedia==1.4.0
 xlrd==1.2.0
