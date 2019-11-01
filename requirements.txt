@@ -63,6 +63,7 @@ soupsieve==1.9.3
 spacy==2.1.0,<3.0.0
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm
 spacy-wordnet==0.0.4
+bloom-filter==1.3
 srsly==0.1.0
 testpath==0.4.2
 textacy==0.9.1
