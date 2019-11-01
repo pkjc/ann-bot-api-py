@@ -20,6 +20,7 @@ from services.SpacySimilarity import process_text
 from services.svo_extraction import findSVAOs
 from services.RuleBasedProbablisticReasoner import combined_rupture_probability
 from services.enrichment import make_terms_list
+import en_core_web_sm
 
 lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
 # Set up the RiveScript bot. This loads the replies from `/eg/brain` of the
@@ -40,7 +41,7 @@ myDB = mysql.connector.connect(
 mycursor = myDB.cursor(prepared=True)
 app = Flask(__name__)
 
-nlp = spacy.load("en_core_web_sm")
+nlp = en_core_web_sm.load()
 nlp.Defaults.stop_words.remove("side")
 
 @app.route("/reply", methods=["POST"])
