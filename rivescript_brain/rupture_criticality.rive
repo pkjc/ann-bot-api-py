@@ -9,14 +9,20 @@
 % multiple prediction rules matched for your query do you to get a combined rupture probability
 - <call>combined_rupture_criticality <star></call>
 
-// // Conversation
-// + [*] [can you] (give me|what is|what will be|calculate) [the] rupture (criticality|probability) (for|of) (a|this|the following) patient
-// - {topic=rup_prob}{@next}
+// Conversation
++ [*] [can you] (give me|what is|what will be|calculate) [the] rupture (criticality|probability|prediction|possibility) (for|of) (a|this|the following) (patient|case)
+- {topic=rup_prob}{@next}
 
-// > topic rup_prob
+> topic rup_prob
 
-// + next
-// - Sure, what is the gender of the patient?
++ next
+- Sure, what all can you tell me about the Aneurysm?
+
++ [*] aneurysm [*]
+- <set aneurysm_feats=<star>>Alright, what all can you tell me about the patient?
+
++ [*] patient [*]
+- <set patient_feats=<star>><call>fetch_rupture_criticality_convo</call>
 
 // + [*] (@gender) [*]
 // % * gender of the patient
@@ -33,4 +39,4 @@
 // + *
 // - hmmm, I didn't hear your answer, let's start over. {topic=rup_prob}{@next}
 
-// < topic
+< topic

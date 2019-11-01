@@ -37,10 +37,10 @@ myDB = mysql.connector.connect(
         user="pankagei_pkj",
         passwd="Snehapkj1989",
         db="pankagei_ann_db")
-
+mycursor = myDB.cursor(prepared=True)
 app = Flask(__name__)
 
-nlp = spacy.load("en_core_web_md")
+nlp = spacy.load("en_core_web_sm")
 nlp.Defaults.stop_words.remove("side")
 
 @app.route("/reply", methods=["POST"])
@@ -178,21 +178,20 @@ def combined_rupture_criticality(rs, args):
         doc = nlp(user_query_glo)
         for term in make_terms_list(doc):
             if term in locations and term == locations[0]:
-                print('mca')
-                combined_rupture_probability('R1,R2', "MCA")[0][1]
+                combined_rupture_probability('R2,R5,R6,R20,R10', "MCA")[0][1]
             elif term in locations and term == locations[1]:
-                print('acom')
-                combined_rupture_probability('R1,R2', "ACOM")[0][1]
+                # rules_dict = make_rules_dict("ACOA_Rule_Matrix_1358.txt")
+                combined_rupture_probability('R1,R2,R3,R4,R5', "ACOM")[0][1]
             elif term in locations and term == locations[2]:
                 print('pcom')
-                combined_rupture_probability('R1,R2', "PCOM")[0][1]
+                combined_rupture_probability('R1,R2,R11,R13,R17', "PCOM")[0][1]
         
         print('raw_uq: ', user_query_glo)
-        
-        print('combined: ', combined_rupture_probability('R1,R2', "MCA")[0][0])
-
-        return "hello"
-    elif args[0].lower() == 'no': 
+        rup_prob_per = calc_percentage(combined_rupture_probability('R1,R2', "MCA")[0][1], 1)
+        print('combined: ', combined_rupture_probability('R1,R2', "MCA")[0][1])
+        resp = "The compbined rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
+        return resp
+    elif args[0].lower() == 'no':
         print(max_score_rule_glo)
         rup_prob_per = calc_percentage(max_score_rule_glo, 1)
         resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
@@ -212,14 +211,22 @@ def fetch_rupture_criticality(rs, args):
     uq = process_text(uq, nlp)
 
     uq_list = uq.split()
-    ind = uq_list.index('size')
+    ind = -1
+    try:
+        ind = uq_list.index('size')
+    except:
+        pass
     if ind != -1:
         uq = uq.replace(uq_list[ind+1], find_size_mapping(uq_list[ind+1]))
-    ind_age = uq_list.index('age')
+    ind_age = -1
+    try:
+        ind_age = uq_list.index('age')
+    except:
+        pass
     if ind_age != -1:
        uq = uq.replace(uq_list[ind_age+1], find_mapping(uq_list[ind_age+1]))
 
-    rules_dict = make_rules_dict("")
+    rules_dict = make_rules_dict("assets/rupture_prediction_rules.txt")
     max_score = 0.0
     max_overlap_len = 0
     max_score_rule = ""
@@ -251,7 +258,7 @@ def fetch_rupture_criticality(rs, args):
             # print(w, rul_score_dict[w])
     print(count)
     if count == 1:
-        rup_prob_per = calc_percentage(list(rul_score_dict.values())[0].decode(), 1)
+        rup_prob_per = calc_percentage(list(rul_score_dict.values())[0], 1)
         resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
         return resp
     elif count > 1:
@@ -431,7 +438,7 @@ def map_spo_to_sql(spo, q_type):
     return sel_query1
 
 def query_db(query):
-    mycursor = myDB.cursor(prepared=True)
+    # mycursor = myDB.cursor(prepared=True)
     # query = """SELECT COUNT(*) FROM `ann_data` 
     # WHERE %s LIKE '%s'""" % (args[0], "%" + args[1] + "%") 
     print(query)
@@ -442,8 +449,10 @@ def query_db(query):
     else: 
         return myresult[0]
 
+def fetch_rupture_criticality_convo(rs, args):
+    print(args)
+
 def query_db_rup(args_dict):
-    mycursor = myDB.cursor(prepared=True)
     query_sel_template = """SELECT `probability` FROM `ann_rup_prob` """
     query_where_template = """ WHERE `location` LIKE %s 
     AND `size` LIKE %s 
@@ -463,7 +472,7 @@ def query_db_rup(args_dict):
         return calc_percentage(result[0].decode(), 10)
 
 def query_db_rup1(args_dict):
-    mycursor = myDB.cursor(prepared=True)
+    # mycursor = myDB.cursor(prepared=True)
     query_sel_template = """SELECT `probability` FROM `ann_rup_prob` """
     query_where_template = """ WHERE `location` LIKE %s 
     AND `size` LIKE %s 

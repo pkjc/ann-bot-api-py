@@ -66,4 +66,4 @@ wasabi==0.2.2
 webencodings==0.5.1
 Werkzeug==0.15.5
 xlrd==1.2.0
-https://github.com/explosion/spacy-models/releases/download/en_core_web_md-2.0.0/en_core_web_md-2.0.0.tar.gz
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz

@@ -6,18 +6,15 @@
 ^ diplopia|blurred vision|location|region|size|side|symptomatic
 ! array patfeaturesvals = male|female|current smoker|Black|African American|yes|no|Current Smoker|Former Smoker|unruptured|ruptured
 ^ Saccular|Paraclinoid|MCA|Basilar Tip|Paraclinoid|Superaclanoid Internal Carotid Artery|Anterior Communicating Artery
-! array race_opts = black|white|asian|asians|african american|caucasian
+! array race_opts = black|white|asian|asians|african american|caucasian|african-american|african americans
 ! array question_types = how many|how many of the|what number of|what percentage of|give me the number of|give me the percentage of
-^ tell me the number of|can you tell me the number of
+^ tell me the number of|can you tell me the number of|what is the number of
 ! array disease_list = diabetes|hypertension|copd|polycystic kidney disease|heart disease
 ! array negatives = don't|didn't|do not|did not|never|not
-! array gender_list = male|males|female|females|unknown
+! array gender_list = male|males|men|female|females|women|unknown
 
 + (@question_types) [of the] patients [*] (are|were|have gender as|belong to the gender) (@gender_list)
 - <call>fetch_patient_data _gender_ <star1> <star3></call>
-
-+ (@question_types) [of the] patients * [age|ages|aged] * [year old|years old]
-- <call>fetch_patient_data _age_ <star1> <star2> <star3></call>
 
 + (@question_types) [of the] patients [*] (current smokers|former smokers|never smoked|non smokers) 
 - <call>fetch_patient_data _smoking_ <star1> <star2> </call>
@@ -32,10 +29,13 @@
 - <call>fetch_patient_data <star1> <star4> !disease</call>
 
 + (@question_types) patients [*] (are|were) @negatives (@gender_list)
-- <call>fetch_patient_data <star1> <star4> !gender</call>
+- <call>fetch_patient_data <star1> <star3> !gender</call>
 
 + (@question_types) [of the] patients [*] [@negatives] (belong to the race|are|were) [@negatives] (@race_opts)
 - <call>fetch_patient_data <star1> <star3> !race</call>
+
++ (@question_types) [of the] patients * [age|ages|aged] * [year old|years old]
+- <call>fetch_patient_data _age_ <star1> <star2> <star3></call>
 
 + (@question_types) [of the] patients have (@patfeatures) [as] (@patfeaturesvals)
 - <call>fetch_patient_data <star1> <star2> <star3></call>
