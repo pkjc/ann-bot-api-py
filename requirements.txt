@@ -13,7 +13,7 @@ murmurhash==1.0.2
 mysql-connector==2.2.9
 numpy==1.17.2
 plac==0.9.6
-preshed==2.0.1
+preshed==3.0.2
 requests==2.22.0
 rivescript==1.14.9
 six==1.11.0
