@@ -20,7 +20,7 @@ from services.SpacySimilarity import process_text
 from services.svo_extraction import findSVAOs
 from services.RuleBasedProbablisticReasoner import combined_rupture_probability
 from services.enrichment import make_terms_list
-import en_core_web_sm
+import en_core_web_md
 
 lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
 # Set up the RiveScript bot. This loads the replies from `/eg/brain` of the
@@ -41,7 +41,7 @@ myDB = mysql.connector.connect(
 mycursor = myDB.cursor(prepared=True)
 app = Flask(__name__)
 
-nlp = en_core_web_sm.load()
+nlp = en_core_web_md.load()
 nlp.Defaults.stop_words.remove("side")
 
 @app.route("/reply", methods=["POST"])
@@ -185,7 +185,7 @@ def combined_rupture_criticality(rs, args):
                 combined_rupture_probability('R1,R2,R3,R4,R5', "ACOM")[0][1]
             elif term in locations and term == locations[2]:
                 print('pcom')
-                combined_rupture_probability('R1,R2,R11,R13,R17', "PCOM")[0][1]
+                combined_rupture_probability('R10,R12,R11,R13,R17', "PCOM")[0][1]
         
         print('raw_uq: ', user_query_glo)
         rup_prob_per = calc_percentage(combined_rupture_probability('R1,R2', "MCA")[0][1], 1)

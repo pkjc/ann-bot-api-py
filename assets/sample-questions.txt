@@ -1,23 +1,19 @@
-// WORKING QUERIES - START
+//  QUERIES - START
 
-give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and gender is female and whose age is 35 and whose aneurysm is on left side and patient has motor deficits and patient was a smoker
+Give me the rupture probability for a patient whose age is 30, aneurysm location is anterior communicating artery, gender is male and he is a smoker
 
-// RULE 1
 give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and gender is female and patient has motor deficits
 
-// RULE 2
 give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and race is african american and age is 40
 
-// RULE 3
 give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and race is african american and patient is a smoker
 
-// RULE 
 give me the rupture criticality for a patient whose aneurysm location is paraclinoid and size is 3.5 and patient has hypertension and patient has multiple aneurysms 
 
 give me the rupture criticality for a patient whose aneurysm location is superaclanoid internal carotid artery and size is 3.5 and age is 40 and aneurysm is on left side
 
-
 Calculate the probability of rupture of an aneurysm that is 3.5 mm in size and is located in the superaclanoid internal carotid artery and it is asymptomatic. The patient's age is 40 and gender is male.
+give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and gender is female and whose age is 35 and whose aneurysm is on left side and patient has motor deficits and patient was a smoker
 
 Click==7.0
 Flask==1.1.1
