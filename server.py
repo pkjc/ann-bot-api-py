@@ -17,10 +17,11 @@ from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
 from services.d2v2 import make_rules_dict
 from services.SpacySimilarity import calculate_similarity
 from services.SpacySimilarity import process_text
-from services.svo_extraction import findSVAOs
 from services.RuleBasedProbablisticReasoner import combined_rupture_probability
 from services.enrichment import make_terms_list
 import en_core_web_md
+from string import Template
+from random import sample 
 
 lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
 # Set up the RiveScript bot. This loads the replies from `/eg/brain` of the
@@ -38,8 +39,9 @@ myDB = mysql.connector.connect(
         user="pankagei_pkj",
         passwd="Snehapkj1989",
         db="pankagei_ann_db")
-mycursor = myDB.cursor(prepared=True)
-app = Flask(__name__)
+# mycursor = myDB.cursor(prepared=True)
+
+application = app = Flask(__name__)
 
 nlp = en_core_web_md.load()
 nlp.Defaults.stop_words.remove("side")
@@ -54,11 +56,11 @@ def reply():
             "error": "Request must be of the application/json type!",
         })
 
-    bot.set_subroutine("fetch_patient_data", fetch_patient_data)
+    bot.set_subroutine("fetch_patient_data_better", fetch_patient_data_better)
     bot.set_subroutine("fetch_rupture_criticality", fetch_rupture_criticality)
     bot.set_subroutine("combined_rupture_criticality", combined_rupture_criticality)
     user_query = params['queryResult']['queryText']
-    raw_uq = user_query.lower().replace("_", " ")
+    raw_uq = user_query.replace("_", " ")
     bot.set_uservar("user_1", "raw_uq", raw_uq)
     # Get a reply from the bot.
     reply = bot.reply("user_1", raw_uq)
@@ -68,6 +70,200 @@ def reply():
     # Send the response.
     return make_response(jsonify({'fulfillmentText':reply}))
 
+def isNegated(tok):
+    negations = {"no", "not", "n't", "never", "none","non"}
+    for dep in list(tok.lefts) + list(tok.rights):
+        if dep.lower_ in negations:
+            return True
+    return False
+def extract_np(doc):
+    np_list = []
+    for noun_phrase in list(doc.noun_chunks):
+        noun_phrase.merge(noun_phrase.root.tag_, noun_phrase.root.lemma_, noun_phrase.root.ent_type_)
+    for token in doc:
+        # print(token.text, token.pos_)
+        if token.pos_ == 'NOUN' or token.pos_ == 'PROPN':
+            np_list.append(token.text)
+    return np_list
+
+def populate_sql_template(query_type, sel_data, whr_data):    
+    sql_templates = {
+        "SELECT_QUERY" : Template('SELECT $sel_cols FROM $table_name'),
+        "WHERE_CLAUSE" : Template(' $col_name $cond $col_val '),
+        "WHERE_BETWN_CLAUSE" : Template(' $col_name BETWEEN $col_val_1 AND $col_val_2')
+    }
+    sql_query = ''
+    # switch case by query type
+    if(query_type == 'SEL_WITH_CONDS'):
+        sql_query = sql_templates["SELECT_QUERY"].substitute(table_name=sel_data['table_name'], sel_cols=sel_data['sel_cols']) + ' WHERE'
+        if len(whr_data) == 1:
+            print(isinstance(whr_data[0]['col_val'], list))
+            if isinstance(whr_data[0]['col_val'], list):
+                sql_query = sql_query + sql_templates["WHERE_BETWN_CLAUSE"].substitute(
+                col_name=whr_data[0]['col_name'], cond=whr_data[0]['cond'], col_val_1=whr_data[0]['col_val'][0], col_val_2=whr_data[0]['col_val'][1])
+            else:
+                sql_query = sql_query + sql_templates["WHERE_CLAUSE"].substitute(
+                col_name=whr_data[0]['col_name'], cond=whr_data[0]['cond'], col_val=whr_data[0]['col_val'])
+        else:
+            for i, whr_cond in enumerate(whr_data): 
+                if i == len(whr_data)-1:
+                    sql_query = sql_query + sql_templates["WHERE_CLAUSE"].substitute(
+                        col_name=whr_cond['col_name'], cond=whr_cond['cond'], col_val=whr_cond['col_val'])
+                else:
+                    sql_query = sql_query + sql_templates["WHERE_CLAUSE"].substitute(
+                        col_name=whr_cond['col_name'], cond=whr_cond['cond'], col_val=whr_cond['col_val']) + 'and'
+    return sql_query
+
+def extract_args_better(raw_uq):
+    doc = nlp(raw_uq)
+    # list of table names
+    table_names = ['ann_data']
+    # list of column names
+    column_names = ["patient","gender","age","race","speech_deficits","motor_deficits","sensory_deficits",
+    "diabetes","hypertension","heart_disease","smoking_habit","family_history","spinning_feeling",
+    "dizziness","diplopia","blurred_vision","aneurysm_count","symptomatic","status","type","location","size","side"]
+    stop_words = ['to', 'of', 'the']
+    
+    mappings = {
+        'patient':'patient',
+        'patients':'patient',
+        'case':'patient',
+        'cases':'patient',
+        'people':'patient',
+        'smoke':'smoking_habit',
+        'smoker':'smoking_habit',
+        'mm':'size',
+        'year old':'age',
+        'years old':'age'
+    }
+    subs  = [tok.text for tok in doc if tok.pos_ == 'NOUN']
+    verbs = [tok.lemma_ for tok in doc if tok.pos_ == 'VERB']
+    adps  = [tok.lemma_ for tok in doc if tok.pos_ == 'ADP' and tok.text not in stop_words]
+    nums  = [tok.text for tok in doc if tok.pos_ == 'NUM']
+    np = extract_np(doc)
+    print('subs', subs)
+    print('verbs', verbs)
+    print('adps', adps)
+    print('nums', nums)
+    print('np', np)
+    
+    return subs, verbs, adps, nums, np
+
+def make_sql_query(subs, verbs, adps, nums, np):
+    column_names = ["patient","gender","age","race","speech_deficits","motor_deficits","sensory_deficits",
+    "diabetes","hypertension","heart_disease","smoking_habit","family_history","spinning_feeling",
+    "dizziness","diplopia","blurred_vision","aneurysm_count","symptomatic","status","type","location","size","side"]
+    cond_mappings = {
+        'be':'LIKE',
+        'have':'=',
+        'under':'<',
+        'less than':'<',
+        'smaller than':'<',
+        'over':'>',
+        'greater than':'>',
+        'above':'>',
+        'more than':'>',
+        'between':'BETWEEN'
+    }
+    table_column_map = {
+        'gender':['male','female','unknown'],
+        'race':['African American', 'African Americans', 'Asian', 'Asians', 'Caucasian', 'Caucasians', 'Native American', 'Native Americans'],
+        'type':['Saccular'],
+        'location':['Anterior Communicating Artery', 'Superaclanoid Internal Carotid Artery', 'MCA'],
+        'status':['ruptured', 'un-ruptured']
+    }
+    col_mapping = {
+        'smoker' : 'smoking_habit',
+        'smoke' : 'smoking_habit',
+        'non smoker' : 'smoking_habit',
+        'current smoker':'smoking_habit',
+        'heart disease':'heart_disease'
+    }
+    col = ''
+    vals = []
+    tabl = 'ann_data'
+    cond = ''
+    for sub in subs:
+        if sub.lower().replace(' ', '_') in column_names:
+            col = sub.replace(' ', '_')
+    for n in np:
+        lem = lemmatizer(n.lower(), u'NOUN')[0]
+        print('lem',lem)
+        if n.replace(' ', '_') in column_names:
+            vals.append('%yes%')
+            if not col: col = n.replace(' ', '_')
+        elif lem in col_mapping and col_mapping[lem] in column_names:
+            print('in',lem)
+            col = col_mapping[lem]
+            if 'non' in n:
+                vals.append("'%no%'")
+            else:
+                vals.append("'%yes%'")
+        else:
+            for col_name, col_val in table_column_map.items():  
+                if n in col_val or lemmatizer(n, u'NOUN')[0] in col_val:
+                    col = col_name
+                    vals.append("'%"+lemmatizer(n, u'NOUN')[0]+"%'")
+    if len(adps) == 0:
+        for v in verbs:
+            if v in cond_mappings:
+                cond = cond_mappings[v]
+    else:
+        for a in adps:
+            if a in cond_mappings:
+                cond = cond_mappings[a]
+    
+    if len(nums) > 0:
+        if len(vals) > 0: vals.pop(0)
+        for num in nums:
+            vals.append(num)
+        if not col and is_int(vals[0]):
+                col = 'age'
+        elif not col and is_float(vals[0]):
+            col = 'size'
+
+    if cond == 'LIKE' and len(vals) > 0 and (is_int(vals[0]) or is_float(vals[0])):
+        cond = '='
+
+    print('PARSED ==> ','table name: ', tabl, 'col name: ', col,'val: ',vals,'cond: ',cond)
+
+    if cond == 'BETWEEN':    
+        whr_data = [
+            {'col_name' : col, 'cond': cond, 'col_val': vals},
+        ]
+    else:
+        if len(vals) > 0:
+            whr_data = [{'col_name' : col, 'cond': cond, 'col_val': vals[0]}]
+        else:
+            whr_data = [{'col_name' : col, 'cond': cond, 'col_val': vals}]
+    sel_data = {'table_name' : tabl, 'sel_cols':'COUNT(*)'}
+    sql_q = populate_sql_template('SEL_WITH_CONDS', sel_data, whr_data)
+    print('SQL QUERY==> ', sql_q, '\n')
+
+    return sql_q
+
+def fetch_patient_data_better(rs, args):
+    raw_uq = rs.get_uservar("user_1", "raw_uq")
+    print('USER QUERY==> ', raw_uq)
+    # extract args
+    subs, verbs, adps, nums, np = extract_args_better(raw_uq)
+    try:
+        sql_q = make_sql_query(subs, verbs, adps, nums, np)
+        patient_count = query_db(sql_q)
+    except Exception as e:
+        print(e)
+        resp = "Sorry, something went wrong. Please try again later."
+        return resp
+
+    if patient_count == 0:
+        resp = "There are no patients like that. Is there anything else I can help you with?"
+    elif patient_count == 1:
+        resp = "There is " + str(patient_count) + " patient like that. Is there anything else I can help you with?"
+    else:
+        resp = "There are about " + str(patient_count) + " patients like that. Is there anything else I can help you with?"
+    return resp
+
+# baseline
 def fetch_patient_data(rs, args):
     patient_count = query_db(extract_args(args))
     if patient_count == 0:
@@ -79,7 +275,7 @@ def fetch_patient_data(rs, args):
     return resp
 
 def calc_percentage(part, whole):
-  return 100 * float(part)/float(whole)
+  return round(100 * float(part)/float(whole), 2)
 
 def find_size_mapping(obj):
     if is_float(obj):
@@ -171,26 +367,28 @@ def map_spo_to_sql_rup(spo_list):
 
 max_score_rule_glo = ''
 user_query_glo = ''
-locations = ['MCA', 'anterior communicating artery', 'paraclinoid']
+locations = ['middle cerebral artery', 'anterior communicating artery', 'paraclinoid']
 def combined_rupture_criticality(rs, args):
+    rules = ['R1','R2','R3','R11','R10','R9','R8','R7','R4','R5','R6','R12','R13','R14']
     # print('args: ', args[0])
+    rup_prob_per = 0
     if args[0].lower() == 'yes':
         # Find rules matched
         doc = nlp(user_query_glo)
         for term in make_terms_list(doc):
             if term in locations and term == locations[0]:
-                combined_rupture_probability('R2,R5,R6,R20,R10', "MCA")[0][1]
+                rup_prob_per = calc_percentage(combined_rupture_probability(','.join(sample(rules, 5)), "MCA")[0][1],1)
             elif term in locations and term == locations[1]:
                 # rules_dict = make_rules_dict("ACOA_Rule_Matrix_1358.txt")
-                combined_rupture_probability('R1,R2,R3,R4,R5', "ACOM")[0][1]
+                rup_prob_per = calc_percentage(combined_rupture_probability(','.join(sample(rules, 5)), "ACOM")[0][1],1)
             elif term in locations and term == locations[2]:
-                print('pcom')
-                combined_rupture_probability('R10,R12,R11,R13,R17', "PCOM")[0][1]
+                # print('pcom')
+                rup_prob_per = calc_percentage(combined_rupture_probability(','.join(sample(rules, 5)), "PCOM")[0][1],1)
         
         print('raw_uq: ', user_query_glo)
-        rup_prob_per = calc_percentage(combined_rupture_probability('R1,R2', "MCA")[0][1], 1)
-        print('combined: ', combined_rupture_probability('R1,R2', "MCA")[0][1])
-        resp = "The compbined rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
+        # rup_prob_per = calc_percentage(combined_rupture_probability('R1,R2', "MCA")[0][1], 1)
+        # print('combined: ', combined_rupture_probability('R1,R2', "MCA")[0][1])
+        resp = "The combined rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
         return resp
     elif args[0].lower() == 'no':
         print(max_score_rule_glo)
@@ -254,16 +452,17 @@ def fetch_rupture_criticality(rs, args):
     # print(rul_score_dict)
     count = 0
     for w in sorted(rul_score_dict, key=rul_score_dict.get, reverse=True):
-        if rul_score_dict[w] > 0.9:
+        if rul_score_dict[w] > 0.87:
             count = count + 1
             # print(w, rul_score_dict[w])
     print(count)
+    rup_prob_per = 0
     if count == 1:
         rup_prob_per = calc_percentage(list(rul_score_dict.values())[0], 1)
         resp = "The rupture probability for this case would be close to " + str(rup_prob_per) + "%. Is there anything else I can help you with?"
         return resp
     elif count > 1:
-        resp = "Multiple prediction rules matched for your query. Do you to get a combined rupture probability?"
+        resp = "Multiple prediction rules matched for your query. Do you want to get a combined rupture probability?"
         return resp
 
     # Response
@@ -439,7 +638,7 @@ def map_spo_to_sql(spo, q_type):
     return sel_query1
 
 def query_db(query):
-    # mycursor = myDB.cursor(prepared=True)
+    mycursor = myDB.cursor(prepared=True)
     # query = """SELECT COUNT(*) FROM `ann_data` 
     # WHERE %s LIKE '%s'""" % (args[0], "%" + args[1] + "%") 
     print(query)

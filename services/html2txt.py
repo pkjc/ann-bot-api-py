@@ -22,3 +22,34 @@ def html2txt(url):
 
     return text
 
+import requests
+
+url = 'http://0.0.0.0:5000/reply'
+myobj = {
+  "queryResult": {
+    "queryText": "how many patients are between the ages 50 to 70",
+    "parameters": {
+      "color": ""
+    },
+    "allRequiredParamsPresent": True,
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            ""
+          ]
+        }
+      }
+    ],
+    "intent": {
+      "name": "projects/quotebot-18fe7/agent/intents/264c9988-9235-447a-a7dd-9d6085b6ea05",
+      "displayName": "patient.data"
+    },
+    "intentDetectionConfidence": 1.0,
+    "languageCode": "en"
+  }
+}
+
+x = requests.post(url, json = myobj)
+
+print(x.text)

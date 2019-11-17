@@ -1,6 +1,6 @@
 import nltk
 from nltk.stem.wordnet import WordNetLemmatizer
-import en_core_web_sm
+import spacy
 # from textblob import TextBlob
 
 SUBJECTS = ["nsubj", "nsubjpass", "csubj", "csubjpass", "agent", "expl"]
@@ -122,8 +122,8 @@ def getObjFromXComp(deps):
 
 def getAllSubs(v):
     verbNegated = isNegated(v)
-    subs = [tok for tok in v.lefts if tok.dep_ in SUBJECTS and tok.pos_ != "DET"]
-    # subs = [tok for tok in v.lefts if tok.dep_ in SUBJECTS]
+    # subs = [tok for tok in v.lefts if tok.dep_ in SUBJECTS and tok.pos_ != "DET"]
+    subs = [tok for tok in v.lefts if tok.dep_ in SUBJECTS]
  
     if len(subs) > 0:
         subs.extend(getSubsFromConjunctions(subs))
@@ -166,8 +166,8 @@ def getAllObjsWithAdjectives(v):
 
 def findSVOs(tokens):
     svos = []
-    verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
-    # verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
+    # verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
+    verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
     for v in verbs:
         subs, verbNegated = getAllSubs(v)
         # hopefully there are subs, if not, don't examine this verb any longer
@@ -181,8 +181,8 @@ def findSVOs(tokens):
 
 def findSVAOs(tokens):
     svos = []
-    verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
-    # verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
+    # verbs = [tok for tok in tokens if tok.pos_ == "VERB" and tok.dep_ != "aux"]
+    verbs = [tok for tok in tokens if tok.pos_ == "VERB"]
     for v in verbs:
         subs, verbNegated = getAllSubs(v)
         # hopefully there are subs, if not, don't examine this verb any longer
@@ -221,14 +221,28 @@ def generate_left_right_adjectives(obj):
     return obj_desc_tokens
 
 # Experimental
-# def findSubsAndObjs(doc):
-#     # subs = [tok for tok in doc.noun_chunks]
-#     subs = ([tok for tok in doc if tok.dep_ in SUBJECTS])
-#     adjs = [tok for tok in doc if tok.dep_ in ADJECTIVES]
-#     objs = [tok for tok in doc if tok.dep_ in OBJECTS]
-#     print(subs)
-#     print(adjs)
-#     print(objs)
+def findSubsAndObjs(doc):
+    # subs = [tok for tok in doc.noun_chunks]
+    subs = ([tok for tok in doc if tok.dep_ in SUBJECTS])
+    adjs = [tok for tok in doc if tok.dep_ in ADJECTIVES or tok.dep_ in PREPOSITIONS]
+    objs = [tok for tok in doc if tok.dep_ in OBJECTS]
+    print(subs)
+    print(adjs)
+    print(objs)
+
+def findSubsAndObjs_2(doc):
+    for chunk in doc.noun_chunks:
+        print(chunk.text)
+    
+    subs  = [tok for tok in doc if tok.pos_ == 'NOUN']
+    verbs = [tok for tok in doc if tok.pos_ == 'VERB']
+    adps  = [tok for tok in doc if tok.pos_ == 'ADP']
+    nums  = [tok for tok in doc if tok.pos_ == 'NUM']
+    
+    print('subs: ', subs)
+    print('adps: ', adps)
+    print('verbs: ', verbs)
+    print('nums: ', nums)
 
 # def tokenize_sentences(document):
 #     sentences = nltk.sent_tokenize(document)
@@ -248,12 +262,11 @@ def generate_left_right_adjectives(obj):
 #                 entities.append(' '.join([c[0] for c in chunk]).lower())
 #     return entities
 
-# nlp = en_core_web_md.load()
-
+# nlp = spacy.load("en_core_web_md")
 # # identify noun phrases and add _ between the words to mark them as noun phrases
 
 # s1 = u"""
-# give me the rupture criticality for a patient whose aneurysm location is anterior communicating artery and size is 3.5 and gender is female and whose age is 35 and whose aneurysm is on left side and patient has motor deficits and patient was a smoker
+# Calculate the rupture probability of an aneurysm of size medium located in the anterior communicating artery the patient is an African American male 
 # """
 # s2 = u"gender is female"
 # s3 = u"patient has motor_deficits"

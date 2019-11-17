@@ -1,0 +1,8 @@
+! version = 2.0
+
+! array question_types = how many|how many of the|what number of|what percentage of|give me the number of|give me the percentage of
+^ tell me the number of|can you tell me the number of|what is the number of|give me the count of|in how many cases|fetch the number of
+
++ (@question_types) [of the] (patient|patients|case|cases|people|persons) *
+- <call>fetch_patient_data_better <star2> <star3></call>
+

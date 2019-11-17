@@ -13,6 +13,12 @@
 - I am <bot name>.
 - You can call me <bot name>.
 
++ what can you do for me
+- I can answer questions about historical patient data and provide aneurysm rupture predictions
+
++ what questions can you answer
+- Ask me questions like How many Aneurysm patients were under 60 years old? or ask me to calculate rupture probability for a patient
+
 + how old are you
 - I'm <bot age> years old.
 - I'm <bot age>.
