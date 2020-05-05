@@ -37,7 +37,7 @@ myDB = mysql.connector.connect(
         host="192.185.129.43",
         port=3306,
         user="pankagei_pkj",
-        passwd="Snehapkj1989",
+        passwd="",
         db="pankagei_ann_db")
 # mycursor = myDB.cursor(prepared=True)
 
