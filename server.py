@@ -34,11 +34,11 @@ bot.load_directory(
 bot.sort_replies()
 
 myDB = mysql.connector.connect(
-        host="192.185.129.43",
-        port=3306,
-        user="pankagei_pkj",
+        host="",
+        port=,
+        user="",
         passwd="",
-        db="pankagei_ann_db")
+        db="")
 # mycursor = myDB.cursor(prepared=True)
 
 application = app = Flask(__name__)
