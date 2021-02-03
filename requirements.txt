@@ -1,5 +1,5 @@
 beautifulsoup4==4.8.0
-bleach==3.1.0
+bleach==3.3.0
 blessed==1.16.1
 blis==0.2.4
 bloom-filter==1.3
