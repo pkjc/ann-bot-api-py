@@ -85,7 +85,7 @@ toolz==0.10.0
 tqdm==4.35.0
 traitlets==4.3.3
 Unidecode==1.1.1
-urllib3==1.24.3
+urllib3==1.26.5
 wasabi==0.2.2
 wcwidth==0.1.7
 webencodings==0.5.1
