@@ -36,7 +36,7 @@ itsdangerous==1.1.0
 jellyfish==0.7.2
 Jinja2==2.10.1
 jmespath==0.9.4
-joblib==0.13.2
+joblib==1.2.0
 jsonschema==2.6.0
 jupyter-core==4.6.1
 MarkupSafe==1.1.1
